@@ -1,7 +1,6 @@
 package uk.zootm.aoc2024.day3;
 
 import com.google.common.io.Resources;
-import uk.zootm.aoc2024.day2.Day2;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -17,34 +16,76 @@ public class Day3 {
 
         var parsed = parse(input);
 
-        System.out.printf("Part 1: %d%n", part1(parsed));
+        // Part 1 only supports mul
+        var part1Input = parsed.stream().filter(op -> op instanceof Mul).collect(Collectors.toList());
+        System.out.printf("Part 1: %d%n", solve(part1Input));
+        System.out.printf("Part 2: %d%n", solve(parsed));
     }
 
     // If you see me writing horrible regexes, no you didn't
     private static final Pattern MUL_PATTERN = Pattern.compile("""
-                    mul\\(
-                        ([1-9][0-9]{0,2})
+            (
+                (?<do>do\\(\\))
+                |
+                (?<dont>don't\\(\\))
+                |
+                (?<mul>mul\\(
+                        (?<left>[1-9][0-9]{0,2})
                         ,
-                        ([1-9][0-9]{0,2})
+                        (?<right>[1-9][0-9]{0,2})
                     \\)
-                    """, Pattern.COMMENTS);
+                )
+            )
+            """, Pattern.COMMENTS);
 
-    static int part1(List<Mul> muls) {
-        return muls.stream().mapToInt(Mul::result).sum();
+    static int solve(List<Op> ops) {
+        int sum = 0;
+        boolean doing = true;
+
+        for(var op : ops) {
+            if(doing && op instanceof Mul mul) {
+                sum += mul.result();
+            } else if (op instanceof Do) {
+                doing = true;
+            } else if (op instanceof Dont) {
+                doing = false;
+            }
+        }
+
+        return sum;
     }
 
-    static List<Mul> parse(String line) {
-        var result = new ArrayList<Mul>();
+    static List<Op> parse(String line) {
+        var result = new ArrayList<Op>();
         var matcher = MUL_PATTERN.matcher(line);
-        while(matcher.find()) {
-            int left = Integer.parseInt(matcher.group(1));
-            int right = Integer.parseInt(matcher.group(2));
-            result.add(new Mul(left, right));
+        while (matcher.find()) {
+            if (matcher.group("do") != null) {
+                result.add(new Do());
+            }
+            if (matcher.group("dont") != null) {
+                result.add(new Dont());
+            }
+            if (matcher.group("mul") != null) {
+                int left = Integer.parseInt(matcher.group("left"));
+                int right = Integer.parseInt(matcher.group("right"));
+                result.add(new Mul(left, right));
+            }
         }
         return result;
     }
 
-    record Mul(int left, int right) {
+    // Just a marker. Tempting to use sealed classes but those don't seem to work with records and I am not willing to
+    // give up records.
+    interface Op {
+    }
+
+    record Dont() implements Op {
+    }
+
+    record Do() implements Op {
+    }
+
+    record Mul(int left, int right) implements Op {
         int result() {
             return left * right;
         }
