@@ -42,13 +42,12 @@ public class Day3 {
         int sum = 0;
         boolean doing = true;
 
-        for(var op : ops) {
-            if(doing && op instanceof Mul mul) {
-                sum += mul.result();
-            } else if (op instanceof Do) {
-                doing = true;
-            } else if (op instanceof Dont) {
-                doing = false;
+        for (var op : ops) {
+            switch (op) {
+                case Mul mul -> sum += doing ? mul.result() : 0;
+                case Do d -> doing = true;
+                case Dont d -> doing = false;
+                default -> throw new IllegalArgumentException("unknown op " + op);
             }
         }
 
