@@ -6,6 +6,7 @@ import com.google.common.io.Resources;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -16,6 +17,37 @@ public class Day4 {
         var grid = new Grid(input);
 
         System.out.printf("Part 1: %d%n", grid.find("XMAS").count());
+        System.out.printf("Part 2: %d%n", countXMases(grid));
+    }
+
+    static long countXMases(Grid grid) {
+        return grid.coords().filter(coord -> hasXMas(grid, coord)).count();
+    }
+
+    // I'm not generalizing this so this is not going on the grid class :)
+    static boolean hasXMas(Grid grid, Vector centre) {
+        if (grid.charAt(centre) != 'A') {
+            return false;
+        }
+
+        List<Vector> corners = Stream.of(Direction.NE, Direction.SE, Direction.SW, Direction.NW)
+                .map(dir -> centre.plus(dir.vector()))
+                .collect(Collectors.toUnmodifiableList());
+
+        if (!corners.stream().allMatch(grid::inBounds)) {
+            return false;
+        }
+
+        long mases = corners.stream()
+                .filter(corner -> grid.charAt(corner) == 'M')
+                .filter(corner -> grid.charAt(opposite(centre, corner)) == 'S')
+                .count();
+
+        return mases == 2L;
+    }
+
+    private static Vector opposite(Vector centre, Vector source) {
+        return centre.minus(source.minus(centre));
     }
 
     enum Direction {
@@ -44,6 +76,10 @@ public class Day4 {
     record Vector(int x, int y) {
         Vector plus(Vector other) {
             return new Vector(x + other.x, y + other.y);
+        }
+
+        Vector minus(Vector other) {
+            return new Vector(x - other.x, y - other.y);
         }
 
         Vector times(int magnitude) {

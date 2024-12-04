@@ -84,6 +84,43 @@ public class Day4Test {
         assertThat(grid.find("XMAS")).hasSize(18);
     }
 
+    @Test
+    public void hasXMas_example() {
+        Grid grid = gridOf("""
+                MMMSXXMASM
+                MSAMXMSMSA
+                AMXSXMAAMM
+                MSAMASMSMX
+                XMASAMXAMM
+                XXAMMXXAMA
+                SMSMSASXSS
+                SAXAMASAAA
+                MAMMMXMMMM
+                MXMXAXMASX
+                """);
+
+        assertThat(Day4.hasXMas(grid, new Vector(2, 1))).isTrue();
+        assertThat(Day4.hasXMas(grid, new Vector(2, 2))).isFalse();
+    }
+
+    @Test
+    public void countXMases_example() {
+        Grid grid = gridOf("""
+                MMMSXXMASM
+                MSAMXMSMSA
+                AMXSXMAAMM
+                MSAMASMSMX
+                XMASAMXAMM
+                XXAMMXXAMA
+                SMSMSASXSS
+                SAXAMASAAA
+                MAMMMXMMMM
+                MXMXAXMASX
+                """);
+
+        assertThat(Day4.countXMases(grid)).isEqualTo(9);
+    }
+
     private Grid gridOf(String string) {
         return new Grid(string.strip().lines().collect(Collectors.toUnmodifiableList()));
     }
