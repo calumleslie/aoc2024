@@ -26,7 +26,7 @@ public class Day4 {
 
     // I'm not generalizing this so this is not going on the grid class :)
     static boolean hasXMas(Grid grid, Vector centre) {
-        if (grid.charAt(centre) != 'A') {
+        if (grid.codepointAt(centre) != 'A') {
             return false;
         }
 
@@ -39,8 +39,8 @@ public class Day4 {
         }
 
         long mases = corners.stream()
-                .filter(corner -> grid.charAt(corner) == 'M')
-                .filter(corner -> grid.charAt(opposite(centre, corner)) == 'S')
+                .filter(corner -> grid.codepointAt(corner) == 'M')
+                .filter(corner -> grid.codepointAt(opposite(centre, corner)) == 'S')
                 .count();
 
         return mases == 2L;
@@ -90,11 +90,24 @@ public class Day4 {
     record FindResult(Vector location, Direction direction) {
     }
 
-    record Grid(List<String> lines) {
-        Grid {
-            long distinctLengths = lines.stream().map(String::length).distinct().count();
+    static class Grid {
+        int width;
+        int[] codepoints;
+
+        Grid(List<String> lines) {
+            long distinctLengths = lines.stream()
+                    .map(line -> line.codePointCount(0, line.length()))
+                    .distinct()
+                    .count();
+
             Preconditions.checkArgument(distinctLengths == 1L);
+
+            //this.lines = lines;
+            String first = lines.getFirst();
+            this.width = first.codePointCount(0, first.length());
+            this.codepoints = lines.stream().flatMapToInt(String::codePoints).toArray();
         }
+
 
         Stream<FindResult> find(String target) {
             var possibleResults = coords().flatMap(loc -> Stream.of(Direction.values()).map(dir -> new FindResult(loc, dir)));
@@ -111,13 +124,14 @@ public class Day4 {
         boolean matches(Vector coord, Direction direction, String target) {
             checkBounds(coord);
 
-            Vector end = coord.plus(direction.vector().times(target.length() - 1));
+            int targetLength = target.codePointCount(0, target.length());
+            Vector end = coord.plus(direction.vector().times(targetLength - 1));
             if (!inBounds(end)) {
                 return false;
             }
 
-            IntStream actualCharacters = Stream.iterate(coord, c -> c.plus(direction.vector())).mapToInt(this::charAt);
-            IntStream targetCharacters = target.chars();
+            IntStream actualCharacters = Stream.iterate(coord, c -> c.plus(direction.vector())).mapToInt(this::codepointAt);
+            IntStream targetCharacters = target.codePoints();
 
             var targetIterator = targetCharacters.iterator();
             var actualIterator = actualCharacters.iterator();
@@ -132,10 +146,10 @@ public class Day4 {
             return true;
         }
 
-        char charAt(Vector coord) {
+        int codepointAt(Vector coord) {
             checkBounds(coord);
             // Not very unicode compliant right now
-            return lines.get(coord.y()).charAt(coord.x());
+            return codepoints[(coord.y() * width) + coord.x()];
         }
 
         private void checkBounds(Vector coord) {
@@ -143,11 +157,11 @@ public class Day4 {
         }
 
         int width() {
-            return lines.getFirst().length();
+            return width;
         }
 
         int height() {
-            return lines.size();
+            return codepoints.length / width;
         }
 
         boolean inBounds(Vector coord) {

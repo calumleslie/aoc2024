@@ -67,6 +67,19 @@ public class Day4Test {
     }
 
     @Test
+    public void find_unicode() {
+        Grid grid = gridOf("""
+                🎄🎅🎁
+                🎊🎉🎅
+                🎈✨🎄
+                """);
+
+        assertThat(grid.find("🎄🎅🎁")).containsExactlyInAnyOrder(
+                new FindResult(new Vector(0, 0), Direction.E),
+                new FindResult(new Vector(2, 2), Direction.N));
+    }
+
+    @Test
     public void find_example() {
         Grid grid = gridOf("""
                 MMMSXXMASM
