@@ -3,8 +3,11 @@ package uk.zootm.aoc2024.day5;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 
+import java.util.Deque;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.Set;
 
 class DirectedGraph<N> {
@@ -39,6 +42,25 @@ class DirectedGraph<N> {
 
     Set<N> incoming(N name) {
         return incoming.get(name);
+    }
+
+    boolean hasCycles() {
+        // It's possible to avoid duplicating work here but maybe that's not worthwhile :D
+        return nodes.stream().anyMatch(this::containsCycle);
+    }
+
+    private boolean containsCycle(N node) {
+        Set<N> seen = new HashSet<>();
+        Deque<N> toCheck = new LinkedList<>();
+
+        N current;
+        while((current = toCheck.poll()) != null) {
+            if(seen.add(current)) {
+                return true;
+            }
+            toCheck.addAll(outgoing(current));
+        }
+        return false;
     }
 
     @Override

@@ -64,16 +64,13 @@ public class Day5Test {
         assertThat(input.updateOrders()).containsExactly(
                 List.of(75, 47, 61, 53, 29),
                 List.of(97, 61, 53, 29, 13),
-                List.of(75, 29, 13)
-        );
-
-        System.out.println(input);
+                List.of(75, 29, 13));
     }
 
     @Test
     public void compliantWithRules_example() {
         Day5.Input example = inputOf(EXAMPLE);
-        DirectedGraph exampleOrdering = example.pageOrdering();
+        DirectedGraph<Integer> exampleOrdering = example.pageOrdering();
 
         assertCompliance(exampleOrdering, "75,47,61,53,29").isTrue();
         assertCompliance(exampleOrdering, "97,61,53,29,13").isTrue();
@@ -90,13 +87,52 @@ public class Day5Test {
         assertThat(Day5.part1(example)).isEqualTo(143);
     }
 
-    private AbstractBooleanAssert<?> assertCompliance(DirectedGraph ordering, String line) {
-        var update = Splitter.on(',')
+    @Test
+    public void correct_example() {
+        Day5.Input example = inputOf(EXAMPLE);
+        DirectedGraph<Integer> exampleOrdering = example.pageOrdering();
+
+        assertThat(Day5.correct(exampleOrdering, updateOf("75,47,61,53,2")))
+                .containsExactlyElementsOf(updateOf("75,47,61,53,2"));
+
+        assertThat(Day5.correct(exampleOrdering, updateOf("97,61,53,29,13")))
+                .containsExactlyElementsOf(updateOf("97,61,53,29,13"));
+
+
+        assertThat(Day5.correct(exampleOrdering, updateOf("75,29,13")))
+                .containsExactlyElementsOf(updateOf("75,29,13"));
+
+
+        assertThat(Day5.correct(exampleOrdering, updateOf("75,97,47,61,53")))
+                .containsExactlyElementsOf(updateOf("97,75,47,61,53"));
+
+
+        assertThat(Day5.correct(exampleOrdering, updateOf("61,13,29")))
+                .containsExactlyElementsOf(updateOf("61,29,13"));
+
+
+        assertThat(Day5.correct(exampleOrdering, updateOf("97,13,75,29,47")))
+                .containsExactlyElementsOf(updateOf("97,75,47,29,13"));
+    }
+
+    @Test
+    public void part2_example() {
+        Day5.Input example = inputOf(EXAMPLE);
+
+        assertThat(Day5.part2(example)).isEqualTo(123);
+    }
+
+    private AbstractBooleanAssert<?> assertCompliance(DirectedGraph<Integer> ordering, String line) {
+        var update = updateOf(line);
+
+        return assertThat(Day5.compliantWithRules(ordering, update));
+    }
+
+    private static List<Integer> updateOf(String line) {
+        return Splitter.on(',')
                 .splitToStream(line)
                 .map(Integer::parseInt)
                 .collect(Collectors.toUnmodifiableList());
-
-        return assertThat(Day5.compliantWithRules(ordering, update));
     }
 
     private static Day5.Input inputOf(String inputString) {
