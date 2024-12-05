@@ -52,10 +52,11 @@ class DirectedGraph<N> {
     private boolean containsCycle(N node) {
         Set<N> seen = new HashSet<>();
         Deque<N> toCheck = new LinkedList<>();
+        toCheck.add(node);
 
         N current;
         while((current = toCheck.poll()) != null) {
-            if(seen.add(current)) {
+            if(!seen.add(current)) {
                 return true;
             }
             toCheck.addAll(outgoing(current));
