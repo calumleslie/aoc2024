@@ -104,7 +104,7 @@ public class Grid {
         return coord.x() >= 0 && coord.x() < width() && coord.y() >= 0 && coord.y() < height();
     }
 
-    record FindResult(Vector location, Direction direction) {
+    public record FindResult(Vector location, Direction direction) {
     }
 
     private static class Graphemes {

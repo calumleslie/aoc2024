@@ -20,6 +20,12 @@ public enum Direction {
         this.vector = new Vector(x, y);
     }
 
+    public Direction clockwise90() {
+        var values = values();
+        // Move down the list of values 2 steps (each step is 45 degrees)
+        return values[(ordinal() + 2) % values.length];
+    }
+
     public Vector vector() {
         return vector;
     }

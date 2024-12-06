@@ -136,7 +136,6 @@ public class Day5Test {
     }
 
     private static Day5.Input inputOf(String inputString) {
-        Day5.Input input = Day5.Input.parse(inputString.strip().lines());
-        return input;
+        return Day5.Input.parse(inputString.strip().lines());
     }
 }

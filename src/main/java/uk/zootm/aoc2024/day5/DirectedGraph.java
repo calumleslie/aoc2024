@@ -5,9 +5,9 @@ import com.google.common.collect.SetMultimap;
 
 import java.util.Deque;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Objects;
-import java.util.Queue;
 import java.util.Set;
 
 class DirectedGraph<N> {
@@ -50,19 +50,21 @@ class DirectedGraph<N> {
     }
 
     private boolean containsCycle(N node) {
-        Set<N> seen = new HashSet<>();
+        Set<N> seen = new LinkedHashSet<>();
         Deque<N> toCheck = new LinkedList<>();
-        toCheck.add(node);
+        toCheck.addAll(outgoing(node));
 
         N current;
         while((current = toCheck.poll()) != null) {
-            if(!seen.add(current)) {
+            if(current.equals(node)) {
                 return true;
             }
+            seen.add(current);
             toCheck.addAll(outgoing(current));
         }
         return false;
     }
+
 
     @Override
     protected DirectedGraph<N> clone() {
