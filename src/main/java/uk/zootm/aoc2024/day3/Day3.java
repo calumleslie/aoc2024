@@ -1,7 +1,6 @@
 package uk.zootm.aoc2024.day3;
 
 import com.google.common.io.Resources;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -11,8 +10,8 @@ import java.util.stream.Collectors;
 
 public class Day3 {
     public static void main(String[] args) throws IOException {
-        var input = Resources.readLines(Day3.class.getResource("input"), StandardCharsets.UTF_8)
-                .stream().collect(Collectors.joining());
+        var input = Resources.readLines(Day3.class.getResource("input"), StandardCharsets.UTF_8).stream()
+                .collect(Collectors.joining());
 
         var parsed = parse(input);
 
@@ -23,7 +22,8 @@ public class Day3 {
     }
 
     // If you see me writing horrible regexes, no you didn't
-    private static final Pattern MUL_PATTERN = Pattern.compile("""
+    private static final Pattern MUL_PATTERN = Pattern.compile(
+            """
             (
                 (?<do>do\\(\\))
                 |
@@ -36,7 +36,8 @@ public class Day3 {
                     \\)
                 )
             )
-            """, Pattern.COMMENTS);
+            """,
+            Pattern.COMMENTS);
 
     static int solve(List<Op> ops) {
         int sum = 0;
@@ -75,14 +76,11 @@ public class Day3 {
 
     // Just a marker. Tempting to use sealed classes but those don't seem to work with records and I am not willing to
     // give up records.
-    interface Op {
-    }
+    interface Op {}
 
-    record Dont() implements Op {
-    }
+    record Dont() implements Op {}
 
-    record Do() implements Op {
-    }
+    record Do() implements Op {}
 
     record Mul(int left, int right) implements Op {
         int result() {

@@ -1,7 +1,6 @@
 package uk.zootm.aoc2024.day2;
 
 import com.google.common.io.Resources;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -12,10 +11,7 @@ public class Day2 {
     public static void main(String[] args) throws IOException {
         var input = Resources.readLines(Day2.class.getResource("input"), StandardCharsets.UTF_8);
 
-        var numSafe = input.stream()
-                .map(Day2::parseReport)
-                .filter(Day2::isSafe)
-                .count();
+        var numSafe = input.stream().map(Day2::parseReport).filter(Day2::isSafe).count();
 
         System.out.printf("Part 1: %d%n", numSafe);
 
@@ -38,7 +34,7 @@ public class Day2 {
         List<long[]> toCheck = new ArrayList<>();
         toCheck.add(removeIndex(report, problematicLevel));
         toCheck.add(removeIndex(report, problematicLevel + 1));
-        if(problematicLevel == 1) {
+        if (problematicLevel == 1) {
             // Special case: We may have just decided the direction was wrong due to the transition before so cram 0
             // in as well
             toCheck.add(removeIndex(report, 0));
@@ -84,8 +80,6 @@ public class Day2 {
     }
 
     public static long[] parseReport(String report) {
-        return Arrays.stream(report.split("\s+", -1))
-                .mapToLong(Long::parseLong)
-                .toArray();
+        return Arrays.stream(report.split("\s+", -1)).mapToLong(Long::parseLong).toArray();
     }
 }

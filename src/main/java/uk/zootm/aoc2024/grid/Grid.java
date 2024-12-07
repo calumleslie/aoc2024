@@ -2,7 +2,6 @@ package uk.zootm.aoc2024.grid;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.ImmutableIntArray;
-
 import java.text.BreakIterator;
 import java.util.Arrays;
 import java.util.List;
@@ -42,7 +41,8 @@ public class Grid {
 
     public Stream<FindResult> find(String targetString) {
         var target = Graphemes.forString(targetString, Locale.getDefault());
-        var possibleResults = coords().flatMap(loc -> Stream.of(Direction.values()).map(dir -> new FindResult(loc, dir)));
+        var possibleResults =
+                coords().flatMap(loc -> Stream.of(Direction.values()).map(dir -> new FindResult(loc, dir)));
 
         return possibleResults.filter(result -> matches(result.location(), result.direction(), target));
     }
@@ -65,7 +65,8 @@ public class Grid {
             return false;
         }
 
-        Stream<String> actualGraphemes = Stream.iterate(coord, c -> c.plus(direction.vector())).map(this::get);
+        Stream<String> actualGraphemes =
+                Stream.iterate(coord, c -> c.plus(direction.vector())).map(this::get);
         Stream<String> targetGraphemes = target.graphemes();
 
         var targetIterator = targetGraphemes.iterator();
@@ -104,8 +105,7 @@ public class Grid {
         return coord.x() >= 0 && coord.x() < width() && coord.y() >= 0 && coord.y() < height();
     }
 
-    public record FindResult(Vector location, Direction direction) {
-    }
+    public record FindResult(Vector location, Direction direction) {}
 
     private static class Graphemes {
         private final String string;

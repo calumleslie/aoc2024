@@ -1,15 +1,14 @@
 package uk.zootm.aoc2024.day4;
 
 import com.google.common.io.Resources;
-import uk.zootm.aoc2024.grid.Direction;
-import uk.zootm.aoc2024.grid.Grid;
-import uk.zootm.aoc2024.grid.Vector;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import uk.zootm.aoc2024.grid.Direction;
+import uk.zootm.aoc2024.grid.Grid;
+import uk.zootm.aoc2024.grid.Vector;
 
 /**
  * What's going on with the complicated "Graphemes" stuff in this one? I wanted to see if I could make this work

@@ -1,18 +1,17 @@
 package uk.zootm.aoc2024.day7;
 
-import com.google.common.primitives.ImmutableLongArray;
-import org.junit.jupiter.api.Test;
-import uk.zootm.aoc2024.day7.Day7.Equation;
-import uk.zootm.aoc2024.day7.Day7.Finder;
-
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.quicktheories.QuickTheory.qt;
 import static org.quicktheories.generators.SourceDSL.longs;
 import static uk.zootm.aoc2024.day7.Day7.Operator.ADD;
 import static uk.zootm.aoc2024.day7.Day7.Operator.CAT;
 import static uk.zootm.aoc2024.day7.Day7.Operator.MUL;
+
+import com.google.common.primitives.ImmutableLongArray;
+import java.util.List;
+import org.junit.jupiter.api.Test;
+import uk.zootm.aoc2024.day7.Day7.Equation;
+import uk.zootm.aoc2024.day7.Day7.Finder;
 
 public class Day7Test {
     @Test
@@ -26,15 +25,13 @@ public class Day7Test {
     public void findOperators_addMul_fromExamples() {
         Finder finder = new Finder(ADD, MUL);
 
-        assertThat(finder.findOperators(Equation.parse("190: 10 19"))).containsExactlyInAnyOrder(
-                List.of(MUL));
+        assertThat(finder.findOperators(Equation.parse("190: 10 19"))).containsExactlyInAnyOrder(List.of(MUL));
 
-        assertThat(finder.findOperators(Equation.parse("3267: 81 40 27"))).containsExactlyInAnyOrder(
-                List.of(ADD, MUL),
-                List.of(MUL, ADD));
+        assertThat(finder.findOperators(Equation.parse("3267: 81 40 27")))
+                .containsExactlyInAnyOrder(List.of(ADD, MUL), List.of(MUL, ADD));
 
-        assertThat(finder.findOperators(Equation.parse("292: 11 6 16 20"))).containsExactlyInAnyOrder(
-                List.of(ADD, MUL, ADD));
+        assertThat(finder.findOperators(Equation.parse("292: 11 6 16 20")))
+                .containsExactlyInAnyOrder(List.of(ADD, MUL, ADD));
 
         assertThat(finder.findOperators(Equation.parse("7290: 6 8 6 15"))).isEmpty();
     }
@@ -43,26 +40,24 @@ public class Day7Test {
     public void findOperators_addMulCat_fromExamples() {
         Finder finder = new Finder(ADD, MUL, CAT);
 
-        assertThat(finder.findOperators(Equation.parse("7290: 6 8 6 15"))).containsExactlyInAnyOrder(
-                List.of(MUL, CAT, MUL));
+        assertThat(finder.findOperators(Equation.parse("7290: 6 8 6 15")))
+                .containsExactlyInAnyOrder(List.of(MUL, CAT, MUL));
 
-        assertThat(finder.findOperators(Equation.parse("156: 15 6"))).containsExactlyInAnyOrder(
-                List.of(CAT));
+        assertThat(finder.findOperators(Equation.parse("156: 15 6"))).containsExactlyInAnyOrder(List.of(CAT));
 
-        assertThat(finder.findOperators(Equation.parse("190: 10 19"))).containsExactlyInAnyOrder(
-                List.of(MUL));
+        assertThat(finder.findOperators(Equation.parse("190: 10 19"))).containsExactlyInAnyOrder(List.of(MUL));
 
-        assertThat(finder.findOperators(Equation.parse("3267: 81 40 27"))).containsExactlyInAnyOrder(
-                List.of(ADD, MUL),
-                List.of(MUL, ADD));
+        assertThat(finder.findOperators(Equation.parse("3267: 81 40 27")))
+                .containsExactlyInAnyOrder(List.of(ADD, MUL), List.of(MUL, ADD));
 
-        assertThat(finder.findOperators(Equation.parse("292: 11 6 16 20"))).containsExactlyInAnyOrder(
-                List.of(ADD, MUL, ADD));
+        assertThat(finder.findOperators(Equation.parse("292: 11 6 16 20")))
+                .containsExactlyInAnyOrder(List.of(ADD, MUL, ADD));
     }
 
     @Test
     public void part1_example() {
-        assertThat(Day7.part1("""
+        assertThat(Day7.part1(
+                        """
                 190: 10 19
                 3267: 81 40 27
                 83: 17 5
@@ -72,12 +67,16 @@ public class Day7Test {
                 192: 17 8 14
                 21037: 9 7 18 13
                 292: 11 6 16 20
-                """.strip().lines())).isEqualTo(3749);
+                """
+                                .strip()
+                                .lines()))
+                .isEqualTo(3749);
     }
 
     @Test
     public void part2_example() {
-        assertThat(Day7.part2("""
+        assertThat(Day7.part2(
+                        """
                 190: 10 19
                 3267: 81 40 27
                 83: 17 5
@@ -87,7 +86,10 @@ public class Day7Test {
                 192: 17 8 14
                 21037: 9 7 18 13
                 292: 11 6 16 20
-                """.strip().lines())).isEqualTo(11387);
+                """
+                                .strip()
+                                .lines()))
+                .isEqualTo(11387);
     }
 
     @Test
@@ -110,7 +112,8 @@ public class Day7Test {
         var suffixes = longs().between(0, 10_000_000);
 
         qt().forAll(completeValues, suffixes)
-                .assuming((complete, potentialSuffix) -> !Long.toString(complete).endsWith(Long.toString(potentialSuffix)))
+                .assuming((complete, potentialSuffix) ->
+                        !Long.toString(complete).endsWith(Long.toString(potentialSuffix)))
                 .checkAssert((complete, potentialSuffix) -> {
                     assertThat(Day7.hasSuffix(complete, potentialSuffix)).isFalse();
                 });
@@ -121,9 +124,8 @@ public class Day7Test {
         // Range where concating two will not exceed a long :)
         var longs = longs().between(0, 1_000_000_000);
 
-        qt().forAll(longs)
-                .checkAssert(value -> {
-                    assertThat(Day7.hasSuffix(value, value)).isFalse();
-                });
+        qt().forAll(longs).checkAssert(value -> {
+            assertThat(Day7.hasSuffix(value, value)).isFalse();
+        });
     }
 }

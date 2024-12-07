@@ -2,7 +2,6 @@ package uk.zootm.aoc2024.day5;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
-
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -55,8 +54,8 @@ class DirectedGraph<N> {
         toCheck.addAll(outgoing(node));
 
         N current;
-        while((current = toCheck.poll()) != null) {
-            if(current.equals(node)) {
+        while ((current = toCheck.poll()) != null) {
+            if (current.equals(node)) {
                 return true;
             }
             seen.add(current);
@@ -65,18 +64,14 @@ class DirectedGraph<N> {
         return false;
     }
 
-
     @Override
     protected DirectedGraph<N> clone() {
-        return new DirectedGraph<>(
-                new HashSet<>(nodes),
-                HashMultimap.create(outgoing),
-                HashMultimap.create(incoming));
+        return new DirectedGraph<>(new HashSet<>(nodes), HashMultimap.create(outgoing), HashMultimap.create(incoming));
     }
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof DirectedGraph other) {
+        if (obj instanceof DirectedGraph other) {
             return Objects.equals(nodes, other.nodes) && Objects.equals(outgoing, other.outgoing);
         } else {
             return false;

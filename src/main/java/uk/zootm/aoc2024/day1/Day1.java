@@ -5,11 +5,9 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Streams;
 import com.google.common.io.Resources;
 import com.google.common.primitives.ImmutableLongArray;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.stream.Stream;
 
 public class Day1 {

@@ -3,7 +3,6 @@ package uk.zootm.aoc2024.day5;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.io.Resources;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -54,7 +53,8 @@ public class Day5 {
 
             var mustPrecede = pageOrdering.incoming(page);
 
-            var predecessor = followingPages.stream().filter(mustPrecede::contains).findFirst();
+            var predecessor =
+                    followingPages.stream().filter(mustPrecede::contains).findFirst();
             if (predecessor.isPresent()) {
                 // Swap entries
                 int j = followingPages.indexOf(predecessor.get());
@@ -101,9 +101,8 @@ public class Day5 {
             while (lineIterator.hasNext()) {
                 String line = lineIterator.next();
 
-                updateOrders.add(COMMA.splitToStream(line)
-                        .map(Integer::parseInt)
-                        .toList());
+                updateOrders.add(
+                        COMMA.splitToStream(line).map(Integer::parseInt).toList());
             }
 
             Preconditions.checkArgument(!pageOrdering.hasCycles());

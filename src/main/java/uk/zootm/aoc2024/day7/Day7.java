@@ -5,7 +5,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 import com.google.common.primitives.ImmutableLongArray;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.EnumSet;
@@ -126,7 +125,10 @@ public class Day7 {
                 OptionalLong nextTarget = op.nextTarget(target, currentValue);
                 if (nextTarget.isPresent()) {
                     var solutions = findOperators(nextTarget.getAsLong(), prefix)
-                            .map(list -> ImmutableList.<Operator>builder().addAll(list).add(op).build());
+                            .map(list -> ImmutableList.<Operator>builder()
+                                    .addAll(list)
+                                    .add(op)
+                                    .build());
 
                     results = Stream.concat(results, solutions);
                 }
@@ -136,13 +138,14 @@ public class Day7 {
         }
     }
 
-
     // Partly using the immutable array here just so equals works
     record Equation(long target, ImmutableLongArray values) {
         static Equation parse(String input) {
             Iterator<String> prefixSuffix = PREFIX_SEPARATOR.split(input).iterator();
             long target = Long.parseLong(prefixSuffix.next());
-            long[] values = SPACE.splitToStream(prefixSuffix.next()).mapToLong(Long::parseLong).toArray();
+            long[] values = SPACE.splitToStream(prefixSuffix.next())
+                    .mapToLong(Long::parseLong)
+                    .toArray();
 
             return new Equation(target, ImmutableLongArray.copyOf(values));
         }

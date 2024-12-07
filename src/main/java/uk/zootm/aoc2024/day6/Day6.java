@@ -1,10 +1,6 @@
 package uk.zootm.aoc2024.day6;
 
 import com.google.common.io.Resources;
-import uk.zootm.aoc2024.grid.Direction;
-import uk.zootm.aoc2024.grid.Grid;
-import uk.zootm.aoc2024.grid.Vector;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -12,13 +8,17 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import uk.zootm.aoc2024.grid.Direction;
+import uk.zootm.aoc2024.grid.Grid;
+import uk.zootm.aoc2024.grid.Vector;
 
 public class Day6 {
     public static void main(String[] args) throws IOException {
         var input = Resources.readLines(Day6.class.getResource("input"), StandardCharsets.UTF_8);
         var grid = Grid.fromCharacterGrid(input);
 
-        System.out.printf("Part 1: %d%n", new Solver(grid).walk().visitedLocations().size());
+        System.out.printf(
+                "Part 1: %d%n", new Solver(grid).walk().visitedLocations().size());
         System.out.printf("Part 2: %d%n", part2(grid).size());
     }
 
@@ -93,6 +93,5 @@ public class Day6 {
         }
     }
 
-    record PathElement(Vector location, Direction direction) {
-    }
+    record PathElement(Vector location, Direction direction) {}
 }

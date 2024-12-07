@@ -1,8 +1,8 @@
 package uk.zootm.aoc2024.day2;
 
-import org.junit.jupiter.api.Test;
-
 import static org.assertj.core.api.BDDAssertions.then;
+
+import org.junit.jupiter.api.Test;
 
 public class Day2Test {
 
@@ -26,7 +26,6 @@ public class Day2Test {
         assertSafeDampened("1 3 6 7 9");
     }
 
-
     @Test
     public void part2_myOwnExamples() {
         assertSafeDampened("48 46 47 49 51 54 56");
@@ -34,7 +33,7 @@ public class Day2Test {
 
     @Test
     public void removeIndex() {
-        long[] removed = Day2.removeIndex(new long[]{0, 1, 2, 3, 4, 5}, 2);
+        long[] removed = Day2.removeIndex(new long[] {0, 1, 2, 3, 4, 5}, 2);
         then(removed).containsExactly(0, 1, 3, 4, 5);
     }
 

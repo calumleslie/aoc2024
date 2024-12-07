@@ -1,9 +1,8 @@
 package uk.zootm.aoc2024.day1;
 
-import org.assertj.core.api.BDDAssertions;
-import org.junit.jupiter.api.Test;
-
 import static org.assertj.core.api.BDDAssertions.then;
+
+import org.junit.jupiter.api.Test;
 
 public class Day1Test {
 
@@ -12,7 +11,8 @@ public class Day1Test {
 
     @Test
     public void part1() {
-        whenDoingPart1("""
+        whenDoingPart1(
+                """
                 3   4
                 4   3
                 2   5
@@ -26,7 +26,8 @@ public class Day1Test {
 
     @Test
     public void part2() {
-        whenDoingPart2("""
+        whenDoingPart2(
+                """
                 3   4
                 4   3
                 2   5

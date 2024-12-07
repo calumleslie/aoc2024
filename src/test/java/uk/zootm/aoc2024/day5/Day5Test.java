@@ -1,16 +1,16 @@
 package uk.zootm.aoc2024.day5;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.google.common.base.Splitter;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.assertj.core.api.AbstractBooleanAssert;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class Day5Test {
-    private static final String EXAMPLE = """
+    private static final String EXAMPLE =
+            """
             47|53
             97|13
             97|61
@@ -32,7 +32,7 @@ public class Day5Test {
             47|29
             75|13
             53|13
-            
+
             75,47,61,53,29
             97,61,53,29,13
             75,29,13
@@ -43,11 +43,12 @@ public class Day5Test {
 
     @Test
     public void input_parse() {
-        String inputString = """
+        String inputString =
+                """
                 47|53
                 97|13
                 97|61
-                
+
                 75,47,61,53,29
                 97,61,53,29,13
                 75,29,13
@@ -59,12 +60,9 @@ public class Day5Test {
         expectedPageOrdering.addEdge(97, 13);
         expectedPageOrdering.addEdge(97, 61);
 
-
         assertThat(input.pageOrdering()).isEqualTo(expectedPageOrdering);
-        assertThat(input.updateOrders()).containsExactly(
-                List.of(75, 47, 61, 53, 29),
-                List.of(97, 61, 53, 29, 13),
-                List.of(75, 29, 13));
+        assertThat(input.updateOrders())
+                .containsExactly(List.of(75, 47, 61, 53, 29), List.of(97, 61, 53, 29, 13), List.of(75, 29, 13));
     }
 
     @Test
@@ -98,18 +96,12 @@ public class Day5Test {
         assertThat(Day5.correct(exampleOrdering, updateOf("97,61,53,29,13")))
                 .containsExactlyElementsOf(updateOf("97,61,53,29,13"));
 
-
-        assertThat(Day5.correct(exampleOrdering, updateOf("75,29,13")))
-                .containsExactlyElementsOf(updateOf("75,29,13"));
-
+        assertThat(Day5.correct(exampleOrdering, updateOf("75,29,13"))).containsExactlyElementsOf(updateOf("75,29,13"));
 
         assertThat(Day5.correct(exampleOrdering, updateOf("75,97,47,61,53")))
                 .containsExactlyElementsOf(updateOf("97,75,47,61,53"));
 
-
-        assertThat(Day5.correct(exampleOrdering, updateOf("61,13,29")))
-                .containsExactlyElementsOf(updateOf("61,29,13"));
-
+        assertThat(Day5.correct(exampleOrdering, updateOf("61,13,29"))).containsExactlyElementsOf(updateOf("61,29,13"));
 
         assertThat(Day5.correct(exampleOrdering, updateOf("97,13,75,29,47")))
                 .containsExactlyElementsOf(updateOf("97,75,47,29,13"));
@@ -129,10 +121,7 @@ public class Day5Test {
     }
 
     private static List<Integer> updateOf(String line) {
-        return Splitter.on(',')
-                .splitToStream(line)
-                .map(Integer::parseInt)
-                .collect(Collectors.toUnmodifiableList());
+        return Splitter.on(',').splitToStream(line).map(Integer::parseInt).collect(Collectors.toUnmodifiableList());
     }
 
     private static Day5.Input inputOf(String inputString) {
