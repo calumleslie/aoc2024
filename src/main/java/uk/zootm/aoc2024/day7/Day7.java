@@ -8,8 +8,10 @@ import com.google.common.primitives.ImmutableLongArray;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.OptionalLong;
 import java.util.stream.Stream;
 
 public class Day7 {
@@ -23,44 +25,82 @@ public class Day7 {
     }
 
     static long part1(Stream<String> lines) {
+        Finder finder = new Finder(Operator.ADD, Operator.MUL);
+
         return lines.map(Equation::parse)
-                .filter(eq -> findOperators(eq).findAny().isPresent())
+                .filter(eq -> finder.findOperators(eq).findAny().isPresent())
                 .mapToLong(Equation::target)
                 .sum();
     }
 
-    static Stream<List<String>> findOperators(Equation equation) {
-        return findOperators(equation.target(), equation.values());
-    }
 
-    static Stream<List<String>> findOperators(long target, ImmutableLongArray array) {
-        Preconditions.checkArgument(!array.isEmpty());
-
-        // Base case; we have found a trivial solution if this is a single element array containing just the target
-        if(array.length() == 1) {
-            if(array.get(0) == target) {
-                return Stream.of(List.of());
-            } else {
-                return Stream.empty();
+    enum Operator {
+        ADD {
+            @Override
+            OptionalLong nextTarget(long target, long currentValue) {
+                return OptionalLong.of(target - currentValue);
             }
-        }
+        }, // +
+        MUL {
+            @Override
+            OptionalLong nextTarget(long target, long currentValue) {
+                if(target % currentValue == 0) {
+                    return OptionalLong.of(target / currentValue);
+                } else {
+                    return OptionalLong.empty();
+                }
+            }
+        };  // ||
 
-        // Other cases we iterate
-        long currentValue = array.get(array.length() - 1);
-        ImmutableLongArray prefix = array.subArray(0, array.length() - 1);
-
-        long targetFromAddition = target - currentValue;
-        Stream<List<String>> solutionsFromAddition = findOperators(targetFromAddition, prefix)
-                .map(list -> ImmutableList.<String>builder().addAll(list).add("+").build());
-
-        Stream<List<String>> solutionsFromMultiplication = Stream.empty();
-        if(target % currentValue == 0) {
-            solutionsFromMultiplication = findOperators(target / currentValue, prefix)
-                    .map(list -> ImmutableList.<String>builder().addAll(list).add("*").build());
-        }
-
-        return Stream.concat(solutionsFromAddition, solutionsFromMultiplication);
+        abstract OptionalLong nextTarget(long target, long currentValue);
     }
+
+    static class Finder {
+        private final EnumSet<Operator> operators;
+
+        Finder(Operator first, Operator... rest) {
+            this.operators = EnumSet.of(first, rest);
+        }
+
+        Finder(EnumSet<Operator> operators) {
+           this.operators = operators;
+        }
+
+        Stream<List<Operator>> findOperators(Equation equation) {
+            return findOperators(equation.target(), equation.values());
+        }
+
+        Stream<List<Operator>> findOperators(long target, ImmutableLongArray array) {
+            Preconditions.checkArgument(!array.isEmpty());
+
+            // Base case; we have found a trivial solution if this is a single element array containing just the target
+            if(array.length() == 1) {
+                if(array.get(0) == target) {
+                    return Stream.of(List.of());
+                } else {
+                    return Stream.empty();
+                }
+            }
+
+            // Other cases we iterate
+            long currentValue = array.get(array.length() - 1);
+            ImmutableLongArray prefix = array.subArray(0, array.length() - 1);
+
+            Stream<List<Operator>> results = Stream.empty();
+            for(var op : operators) {
+                OptionalLong nextTarget = op.nextTarget(target, currentValue);
+                if(nextTarget.isPresent()) {
+                    var solutions = findOperators(nextTarget.getAsLong(), prefix)
+                            .map(list -> ImmutableList.<Operator>builder().addAll(list).add(op).build());
+
+                    results = Stream.concat(results, solutions);
+                }
+            }
+
+            return results;
+        }
+    }
+
 
     // Partly using the immutable array here just so equals works
     record Equation(long target, ImmutableLongArray values) {

@@ -3,10 +3,13 @@ package uk.zootm.aoc2024.day7;
 import com.google.common.primitives.ImmutableLongArray;
 import org.junit.jupiter.api.Test;
 import uk.zootm.aoc2024.day7.Day7.Equation;
+import uk.zootm.aoc2024.day7.Day7.Finder;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.zootm.aoc2024.day7.Day7.Operator.ADD;
+import static uk.zootm.aoc2024.day7.Day7.Operator.MUL;
 
 public class Day7Test {
     @Test
@@ -18,15 +21,17 @@ public class Day7Test {
 
     @Test
     public void findOperators_fromExamples() {
-        assertThat(Day7.findOperators(Equation.parse("190: 10 19"))).containsExactlyInAnyOrder(
-                List.of("*"));
+        Finder finder = new Finder(ADD, MUL);
 
-        assertThat(Day7.findOperators(Equation.parse("3267: 81 40 27"))).containsExactlyInAnyOrder(
-                List.of("+", "*"),
-                List.of("*", "+"));
+        assertThat(finder.findOperators(Equation.parse("190: 10 19"))).containsExactlyInAnyOrder(
+                List.of(MUL));
 
-        assertThat(Day7.findOperators(Equation.parse("292: 11 6 16 20"))).containsExactlyInAnyOrder(
-                List.of("+", "*", "+"));
+        assertThat(finder.findOperators(Equation.parse("3267: 81 40 27"))).containsExactlyInAnyOrder(
+                List.of(ADD, MUL),
+                List.of(MUL, ADD));
+
+        assertThat(finder.findOperators(Equation.parse("292: 11 6 16 20"))).containsExactlyInAnyOrder(
+                List.of(ADD, MUL, ADD));
     }
 
     @Test
