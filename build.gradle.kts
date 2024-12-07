@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("com.diffplug.spotless") version "7.0.0.BETA4"
 }
 
 group = "uk.zootm.interview"
@@ -7,6 +8,12 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+}
+
+spotless {
+    java {
+        palantirJavaFormat()
+    }
 }
 
 dependencies {
