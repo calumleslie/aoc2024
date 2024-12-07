@@ -21,8 +21,26 @@ public class Day6Test {
                 ......#...
                 """);
 
-        var path = Day6.walk(grid);
+        var path = new Day6.Solver(grid).walk();
 
-        assertThat(path.stream().distinct()).hasSize(41);
+        assertThat(path.visitedLocations()).hasSize(41);
+    }
+
+    @Test
+    public void part2_examples() {
+        var grid = Grid.fromString("""
+                ....#.....
+                .........#
+                ..........
+                ..#.......
+                .......#..
+                ..........
+                .#..^.....
+                ........#.
+                #.........
+                ......#...
+                """);
+
+        assertThat(Day6.part2(grid)).hasSize(6);
     }
 }
