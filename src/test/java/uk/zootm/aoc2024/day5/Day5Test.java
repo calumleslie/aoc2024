@@ -54,7 +54,7 @@ public class Day5Test {
                 """;
         Day5.Input input = inputOf(inputString);
 
-        DirectedGraph expectedPageOrdering = new DirectedGraph();
+        DirectedGraph<Integer> expectedPageOrdering = new DirectedGraph();
         expectedPageOrdering.addEdge(47, 53);
         expectedPageOrdering.addEdge(97, 13);
         expectedPageOrdering.addEdge(97, 61);
