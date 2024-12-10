@@ -1,0 +1,117 @@
+package uk.zootm.aoc2024.day8;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.google.common.collect.ImmutableListMultimap;
+import java.util.stream.Collectors;
+import org.junit.jupiter.api.Test;
+import uk.zootm.aoc2024.day8.Day8.AntennaMap;
+import uk.zootm.aoc2024.grid.Grid;
+import uk.zootm.aoc2024.grid.Vector;
+
+public class Day8Test {
+    @Test
+    public void parse_fromExample() {
+        var map = AntennaMap.parse(
+                Grid.fromString(
+                        """
+                                ............
+                                ........0...
+                                .....0......
+                                .......0....
+                                ....0.......
+                                ......A.....
+                                ............
+                                ............
+                                ........A...
+                                .........A..
+                                ............
+                                ............
+                                """));
+
+        assertThat(map)
+                .isEqualTo(new AntennaMap(
+                        ImmutableListMultimap.<String, Vector>builder()
+                                .put("0", new Vector(8, 1))
+                                .put("0", new Vector(5, 2))
+                                .put("0", new Vector(7, 3))
+                                .put("0", new Vector(4, 4))
+                                .put("A", new Vector(6, 5))
+                                .put("A", new Vector(8, 8))
+                                .put("A", new Vector(9, 9))
+                                .build(),
+                        12,
+                        12));
+    }
+
+    @Test
+    public void interferes_singleExamples() {
+        assertThat(Day8.interferes(new Vector(5, 5), new Vector(4, 3), new Vector(3, 1)))
+                .isTrue();
+
+        assertThat(Day8.interferes(new Vector(5, 5), new Vector(4, 3), new Vector(3, 2)))
+                .isFalse();
+    }
+
+    @Test
+    public void findInterferingPoints() {
+        // Just need bounds here
+        AntennaMap map = new AntennaMap(ImmutableListMultimap.of(), 12, 12);
+
+        assertThat(map.findInterferingPoints(new Vector(5, 5), new Vector(4, 3)))
+                .containsExactlyInAnyOrder(new Vector(3, 1), new Vector(6, 7));
+    }
+
+    @Test
+    public void findAllInterferingPoints_fromExample1() {
+        Grid grid = Grid.fromString(
+                """
+                ..........
+                ...#......
+                #.........
+                ....a.....
+                ........a.
+                .....a....
+                ..#.......
+                ......A...
+                ..........
+                ..........
+                """);
+
+        var map = AntennaMap.parse(grid);
+
+        var expectedInterfering = grid.coords()
+                .filter(c -> "#".equals(grid.get(c)) || "A".equals(grid.get(c)))
+                .toList();
+
+        assertThat(map.findAllInterferingPoints()).containsExactlyInAnyOrderElementsOf(expectedInterfering);
+    }
+
+    @Test
+    public void findAllInterferingPoints_fromExample2() {
+        Grid grid = Grid.fromString(
+                """
+                ......#....#
+                ...#....0...
+                ....#0....#.
+                ..#....0....
+                ....0....#..
+                .#....A.....
+                ...#........
+                #......#....
+                ........A...
+                .........A..
+                ..........#.
+                ..........#.
+                """);
+
+        var map = AntennaMap.parse(grid);
+
+        var expectedInterfering =
+                grid.coords().filter(c -> "#".equals(grid.get(c))).collect(Collectors.toList());
+        // "antinode overlapping the topmost A-frequency antenna"
+        expectedInterfering.add(new Vector(6, 5));
+
+        assertThat(map.findAllInterferingPoints().distinct()).containsExactlyInAnyOrderElementsOf(expectedInterfering);
+    }
+}
