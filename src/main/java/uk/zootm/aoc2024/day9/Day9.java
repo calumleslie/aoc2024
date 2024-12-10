@@ -61,14 +61,19 @@ public class Day9 {
         var filesInReverseIdOrder = fs.files().stream()
                 .sorted(Comparator.comparing(FileLocation::id).reversed());
 
+        // File lengths are up to 9 due to the way the problem is written. This obviously doesnt' generalize
+        // so we'll add it here :)
+        var cursors = new int[10];
+
         filesInReverseIdOrder.forEach(file -> {
             if(file.id() % 100 == 0 ) {
                 System.out.println(file);
             }
-            fs.findFirstBlankSpace(file.length()).stream()
+            fs.findFirstBlankSpace(cursors[file.length], file.length()).stream()
                     .filter(newStart -> newStart < file.start())
                     .forEach(newStart -> {
                         fs.swapRange(newStart, file.start(), file.length());
+                        cursors[file.length] = newStart;
                     });
         });
     }
@@ -115,8 +120,8 @@ public class Day9 {
             return firstUnoccupiedSector() > lastOccupiedSector();
         }
 
-        OptionalInt findFirstBlankSpace(int length) {
-            return IntStream.range(0, sectors.length - length)
+        OptionalInt findFirstBlankSpace(int start, int length) {
+            return IntStream.range(start, sectors.length - length)
                     .filter(from -> isFree(from, length))
                     .findFirst();
         }
