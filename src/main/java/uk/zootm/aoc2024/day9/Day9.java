@@ -66,9 +66,6 @@ public class Day9 {
         var cursors = new int[10];
 
         filesInReverseIdOrder.forEach(file -> {
-            if(file.id() % 100 == 0 ) {
-                System.out.println(file);
-            }
             fs.findFirstBlankSpace(cursors[file.length], file.length()).stream()
                     .filter(newStart -> newStart < file.start())
                     .forEach(newStart -> {
