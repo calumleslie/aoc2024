@@ -105,4 +105,54 @@ public class Day8Test {
 
         assertThat(map.interferingPoints()).containsExactlyInAnyOrderElementsOf(expectedInterfering);
     }
+
+    @Test
+    public void findAllPaths_fromExample1() {
+        Grid grid = Grid.fromString(
+                """
+                        T....#....
+                        ...T......
+                        .T....#...
+                        .........#
+                        ..#.......
+                        ..........
+                        ...#......
+                        ..........
+                        ....#.....
+                        ..........
+                        """);
+
+        var map = AntennaMap.parse(grid);
+
+        var expected = grid.coords()
+                .filter(c -> "#".equals(grid.get(c)) || "T".equals(grid.get(c)))
+                .collect(Collectors.toList());
+
+        assertThat(map.pathPoints()).containsExactlyInAnyOrderElementsOf(expected);
+    }
+
+    @Test
+    public void findAllPaths_fromExample2() {
+        Grid grid = Grid.fromString(
+                """
+                        ##....#....#
+                        .#.#....0...
+                        ..#.#0....#.
+                        ..##...0....
+                        ....0....#..
+                        .#...#A....#
+                        ...#..#.....
+                        #....#.#....
+                        ..#.....A...
+                        ....#....A..
+                        .#........#.
+                        ...#......##
+                        """);
+
+        var map = AntennaMap.parse(grid);
+
+        var expected = grid.coords().filter(c -> !".".equals(grid.get(c))).collect(Collectors.toList());
+
+        assertThat(map.pathPoints()).containsExactlyInAnyOrderElementsOf(expected);
+    }
 }

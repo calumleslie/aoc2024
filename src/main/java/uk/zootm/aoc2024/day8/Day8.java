@@ -15,7 +15,8 @@ public class Day8 {
         var input = Resources.readLines(Day8.class.getResource("input"), StandardCharsets.UTF_8);
         var map = AntennaMap.parse(Grid.fromCharacterGrid(input));
 
-        System.out.printf("Part 1: %d%n", map.interferingPoints().distinct().count());
+        System.out.printf("Part 1: %d%n", map.interferingPoints().count());
+        System.out.printf("Part 2: %d%n", map.pathPoints().count());
     }
 
     record AntennaMap(ListMultimap<String, Vector> antennas, int height, int width) {
@@ -42,6 +43,10 @@ public class Day8 {
                     .filter(PathElement::interferes)
                     .map(PathElement::point)
                     .distinct();
+        }
+
+        Stream<Vector> pathPoints() {
+            return findAllPaths().map(PathElement::point).distinct();
         }
 
         Stream<PathElement> findAllPaths() {
