@@ -2,10 +2,13 @@ package uk.zootm.aoc2024.day9;
 
 import com.google.common.io.Resources;
 import com.google.common.primitives.ImmutableIntArray;
-
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Comparator;
+import java.util.List;
+import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
 public class Day9 {
@@ -16,6 +19,10 @@ public class Day9 {
         var part1Fs = fs.clone();
         compact(part1Fs);
         System.out.printf("Part 1: %d%n", part1Fs.checksum());
+
+        var part2Fs = fs.clone();
+        compactNonFragmented(part2Fs);
+        System.out.printf("Part 2: %d%n", part2Fs.checksum());
     }
 
     static Filesystem parse(String input) {
@@ -45,9 +52,25 @@ public class Day9 {
     }
 
     static void compact(Filesystem fs) {
-        while(!fs.contiguous()) {
+        while (!fs.contiguous()) {
             fs.swap(fs.firstUnoccupiedSector(), fs.lastOccupiedSector());
         }
+    }
+
+    static void compactNonFragmented(Filesystem fs) {
+        var filesInReverseIdOrder = fs.files().stream()
+                .sorted(Comparator.comparing(FileLocation::id).reversed());
+
+        filesInReverseIdOrder.forEach(file -> {
+            if(file.id() % 100 == 0 ) {
+                System.out.println(file);
+            }
+            fs.findFirstBlankSpace(file.length()).stream()
+                    .filter(newStart -> newStart < file.start())
+                    .forEach(newStart -> {
+                        fs.swapRange(newStart, file.start(), file.length());
+                    });
+        });
     }
 
     static class Filesystem {
@@ -65,6 +88,12 @@ public class Day9 {
                 occupied.set(i, sectors[i] >= 0);
             }
             return new Filesystem(sectors, occupied);
+        }
+
+        void swapRange(int i1, int i2, int length) {
+            for (int o = 0; o < length; o++) {
+                swap(i1 + o, i2 + o);
+            }
         }
 
         void swap(int i1, int i2) {
@@ -86,6 +115,41 @@ public class Day9 {
             return firstUnoccupiedSector() > lastOccupiedSector();
         }
 
+        OptionalInt findFirstBlankSpace(int length) {
+            return IntStream.range(0, sectors.length - length)
+                    .filter(from -> isFree(from, length))
+                    .findFirst();
+        }
+
+        List<FileLocation> files() {
+            int[] occupiedIndexes = occupied.stream().toArray();
+            List<FileLocation> found = new ArrayList<>();
+            int prevId = -1;
+            int prevIdx = -1;
+            int start = 0;
+            for (int i : occupiedIndexes) {
+                int id = sectors[i];
+                if (prevId != id) {
+                    if (prevId != -1) {
+                        found.add(new FileLocation(prevId, start, prevIdx - start + 1));
+                    }
+                    start = i;
+                }
+                prevId = id;
+                prevIdx = i;
+            }
+            if (prevId != -1) {
+                found.add(new FileLocation(prevId, start, prevIdx - start + 1));
+            }
+            return found;
+        }
+
+        private boolean isFree(int from, int length) {
+            BitSet range = new BitSet();
+            range.set(from, from + length);
+            return !occupied.intersects(range);
+        }
+
         int firstUnoccupiedSector() {
             return occupied.nextClearBit(0);
         }
@@ -95,9 +159,7 @@ public class Day9 {
         }
 
         long checksum() {
-            return occupied.stream()
-                    .mapToLong(i -> i * sectors[i])
-                    .sum();
+            return occupied.stream().mapToLong(i -> i * sectors[i]).sum();
         }
 
         @Override
@@ -124,4 +186,6 @@ public class Day9 {
             return Arrays.toString(sectors);
         }
     }
+
+    record FileLocation(int id, int start, int length) {}
 }
