@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.OptionalLong;
 import java.util.stream.Stream;
+import uk.zootm.aoc2024.util.LongStrings;
 
 public class Day7 {
     private static final Splitter PREFIX_SEPARATOR = Splitter.on(": ");
@@ -63,7 +64,7 @@ public class Day7 {
             OptionalLong nextTarget(long target, long currentValue) {
                 // We can't form a suffix of a negative number as it would have a negative symbol in the middle
                 if (currentValue >= 0 && hasSuffix(target, currentValue)) {
-                    long currentValueLength = lengthBase10(currentValue);
+                    long currentValueLength = LongStrings.lengthBase10(currentValue);
 
                     return OptionalLong.of((target - currentValue) / (long) Math.pow(10, currentValueLength));
                 } else {
@@ -78,15 +79,11 @@ public class Day7 {
     // Strict suffix, i.e. the values cannot be equal
     static boolean hasSuffix(long target, long suffix) {
         // In hindsight doing this with strings would have been much easier
-        long targetLength = lengthBase10(target);
-        long suffixLength = lengthBase10(suffix);
+        long targetLength = LongStrings.lengthBase10(target);
+        long suffixLength = LongStrings.lengthBase10(suffix);
         long remainder = target % (long) Math.pow(10, suffixLength);
 
         return targetLength > suffixLength && remainder == suffix;
-    }
-
-    private static long lengthBase10(long value) {
-        return value == 0 ? 1L : 1L + (long) Math.floor(Math.log10(value));
     }
 
     static class Finder {
