@@ -12,6 +12,11 @@ public class LongGrid extends AbstractGrid<Long> {
         this.width = width;
     }
 
+    public static LongGrid empty(int width, int height) {
+        long[] contents = new long[width * height];
+        return new LongGrid(contents, width);
+    }
+
     public static LongGrid fromStringGrid(Grid<String> input) {
         long[] contents =
                 input.coords().map(input::get).mapToLong(Long::parseLong).toArray();
@@ -21,6 +26,10 @@ public class LongGrid extends AbstractGrid<Long> {
     @Override
     public Long get(Vector coord) {
         return getAsLong(coord);
+    }
+
+    public void set(Vector coord, long value) {
+        contents[coordToIndex(coord)] = value;
     }
 
     public long getAsLong(Vector coord) {
