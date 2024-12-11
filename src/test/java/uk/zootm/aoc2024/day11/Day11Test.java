@@ -3,6 +3,7 @@ package uk.zootm.aoc2024.day11;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
+import uk.zootm.aoc2024.day11.Day11.FrequencyMap;
 
 public class Day11Test {
 
@@ -25,16 +26,18 @@ public class Day11Test {
 
     @Test
     public void blink_array() {
-        assertThat(Day11.blink(new long[] {253, 0, 2024, 14168})).containsExactly(512072, 1, 20, 24, 28676032);
+        assertThat(Day11.blink(FrequencyMap.of(253L, 0L, 2024L, 14168L)))
+                .isEqualTo(FrequencyMap.of(512072, 1, 20, 24, 28676032));
     }
 
     @Test
     public void blinkTimes_examples() {
-        long[] initial = new long[] {125, 17};
+        var initial = FrequencyMap.of(125, 17);
 
         assertThat(Day11.blinkTimes(initial, 6))
-                .containsExactly(
-                        2097446912, 14168, 4048, 2, 0, 2, 4, 40, 48, 2024, 40, 48, 80, 96, 2, 8, 6, 7, 6, 0, 3, 2);
-        assertThat(Day11.blinkTimes(initial, 25)).hasSize(55312);
+                .isEqualTo(FrequencyMap.of(
+                        2097446912, 14168, 4048, 2, 0, 2, 4, 40, 48, 2024, 40, 48, 80, 96, 2, 8, 6, 7, 6, 0, 3, 2));
+
+        assertThat(Day11.blinkTimes(initial, 25).count()).isEqualTo(55312);
     }
 }
