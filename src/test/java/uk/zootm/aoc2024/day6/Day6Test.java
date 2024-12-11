@@ -3,12 +3,12 @@ package uk.zootm.aoc2024.day6;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
-import uk.zootm.aoc2024.grid.Grid;
+import uk.zootm.aoc2024.grid.CharacterGrid;
 
 public class Day6Test {
     @Test
     public void walk_example() {
-        var grid = Grid.fromString(
+        var grid = CharacterGrid.fromString(
                 """
                 ....#.....
                 .........#
@@ -29,7 +29,7 @@ public class Day6Test {
 
     @Test
     public void part2_examples() {
-        var grid = Grid.fromString(
+        var grid = CharacterGrid.fromString(
                 """
                 ....#.....
                 .........#

@@ -8,21 +8,21 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import uk.zootm.aoc2024.grid.CharacterGrid;
 import uk.zootm.aoc2024.grid.Direction;
-import uk.zootm.aoc2024.grid.Grid;
 import uk.zootm.aoc2024.grid.Vector;
 
 public class Day6 {
     public static void main(String[] args) throws IOException {
         var input = Resources.readLines(Day6.class.getResource("input"), StandardCharsets.UTF_8);
-        var grid = Grid.fromCharacterGrid(input);
+        var grid = CharacterGrid.fromCharacterGrid(input);
 
         System.out.printf(
                 "Part 1: %d%n", new Solver(grid).walk().visitedLocations().size());
         System.out.printf("Part 2: %d%n", part2(grid).size());
     }
 
-    static List<Vector> part2(Grid grid) {
+    static List<Vector> part2(CharacterGrid grid) {
         Path mainPath = new Solver(grid).walk();
 
         // Only need to check things we'd bump into. Feels like there's probably a "nice" algorithm for this but I do
@@ -36,14 +36,14 @@ public class Day6 {
     }
 
     static class Solver {
-        private final Grid grid;
+        private final CharacterGrid grid;
         private final Set<Vector> extraObstacles;
 
-        Solver(Grid grid) {
+        Solver(CharacterGrid grid) {
             this(grid, Collections.emptySet());
         }
 
-        public Solver(Grid grid, Set<Vector> extraObstacles) {
+        public Solver(CharacterGrid grid, Set<Vector> extraObstacles) {
             this.grid = grid;
             this.extraObstacles = extraObstacles;
         }

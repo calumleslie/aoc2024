@@ -6,8 +6,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import uk.zootm.aoc2024.grid.CharacterGrid;
 import uk.zootm.aoc2024.grid.Direction;
-import uk.zootm.aoc2024.grid.Grid;
 import uk.zootm.aoc2024.grid.Vector;
 
 /**
@@ -20,18 +20,18 @@ public class Day4 {
 
     public static void main(String[] args) throws IOException {
         var input = Resources.readLines(Day4.class.getResource("input"), StandardCharsets.UTF_8);
-        var grid = Grid.fromCharacterGrid(input);
+        var grid = CharacterGrid.fromCharacterGrid(input);
 
         System.out.printf("Part 1: %d%n", grid.find("XMAS").count());
         System.out.printf("Part 2: %d%n", countXMases(grid));
     }
 
-    static long countXMases(Grid grid) {
+    static long countXMases(CharacterGrid grid) {
         return grid.coords().filter(coord -> hasXMas(grid, coord)).count();
     }
 
     // I'm not generalizing this so this is not going on the grid class :)
-    static boolean hasXMas(Grid grid, Vector centre) {
+    static boolean hasXMas(CharacterGrid grid, Vector centre) {
         if (!grid.get(centre).equals("A")) {
             return false;
         }

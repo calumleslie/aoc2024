@@ -7,20 +7,20 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-import uk.zootm.aoc2024.grid.Grid;
+import uk.zootm.aoc2024.grid.CharacterGrid;
 import uk.zootm.aoc2024.grid.Vector;
 
 public class Day8 {
     public static void main(String[] args) throws Exception {
         var input = Resources.readLines(Day8.class.getResource("input"), StandardCharsets.UTF_8);
-        var map = AntennaMap.parse(Grid.fromCharacterGrid(input));
+        var map = AntennaMap.parse(CharacterGrid.fromCharacterGrid(input));
 
         System.out.printf("Part 1: %d%n", map.interferingPoints().count());
         System.out.printf("Part 2: %d%n", map.pathPoints().count());
     }
 
     record AntennaMap(ListMultimap<String, Vector> antennas, int height, int width) {
-        static AntennaMap parse(Grid grid) {
+        static AntennaMap parse(CharacterGrid grid) {
             ImmutableListMultimap.Builder<String, Vector> result = ImmutableListMultimap.builder();
 
             grid.coords()

@@ -3,12 +3,12 @@ package uk.zootm.aoc2024.grid;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
-import uk.zootm.aoc2024.grid.Grid.FindResult;
+import uk.zootm.aoc2024.grid.CharacterGrid.FindResult;
 
-public class GridTest {
+public class CharacterGridTest {
     @Test
     public void matches_variousMatches() {
-        Grid grid = Grid.fromString(
+        CharacterGrid grid = CharacterGrid.fromString(
                 """
                 SATOR
                 AREPO
@@ -26,7 +26,7 @@ public class GridTest {
 
     @Test
     public void matches_outOfBounds() {
-        Grid grid = Grid.fromString(
+        CharacterGrid grid = CharacterGrid.fromString(
                 """
                 SATOR
                 AREPO
@@ -42,7 +42,7 @@ public class GridTest {
 
     @Test
     public void find_multipleMatches() {
-        Grid grid = Grid.fromString(
+        CharacterGrid grid = CharacterGrid.fromString(
                 """
                 SATOR
                 AREPO
@@ -68,7 +68,7 @@ public class GridTest {
 
     @Test
     public void find_unicode() {
-        Grid grid = Grid.fromString(
+        CharacterGrid grid = CharacterGrid.fromString(
                 """
                 🎄🎅🏼🎁
                 🎊🎉🎅🏼
@@ -82,7 +82,7 @@ public class GridTest {
 
     @Test
     public void find_example() {
-        Grid grid = Grid.fromString(
+        CharacterGrid grid = CharacterGrid.fromString(
                 """
                 MMMSXXMASM
                 MSAMXMSMSA

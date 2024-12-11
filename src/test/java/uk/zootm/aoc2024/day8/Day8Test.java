@@ -6,14 +6,14 @@ import com.google.common.collect.ImmutableListMultimap;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import uk.zootm.aoc2024.day8.Day8.AntennaMap;
-import uk.zootm.aoc2024.grid.Grid;
+import uk.zootm.aoc2024.grid.CharacterGrid;
 import uk.zootm.aoc2024.grid.Vector;
 
 public class Day8Test {
     @Test
     public void parse_fromExample() {
         var map = AntennaMap.parse(
-                Grid.fromString(
+                CharacterGrid.fromString(
                         """
                                 ............
                                 ........0...
@@ -55,7 +55,7 @@ public class Day8Test {
 
     @Test
     public void interferingPoints_fromExample1() {
-        Grid grid = Grid.fromString(
+        CharacterGrid grid = CharacterGrid.fromString(
                 """
                         ..........
                         ...#......
@@ -80,7 +80,7 @@ public class Day8Test {
 
     @Test
     public void interferingPoints_fromExample2() {
-        Grid grid = Grid.fromString(
+        CharacterGrid grid = CharacterGrid.fromString(
                 """
                         ......#....#
                         ...#....0...
@@ -108,7 +108,7 @@ public class Day8Test {
 
     @Test
     public void findAllPaths_fromExample1() {
-        Grid grid = Grid.fromString(
+        CharacterGrid grid = CharacterGrid.fromString(
                 """
                         T....#....
                         ...T......
@@ -133,7 +133,7 @@ public class Day8Test {
 
     @Test
     public void findAllPaths_fromExample2() {
-        Grid grid = Grid.fromString(
+        CharacterGrid grid = CharacterGrid.fromString(
                 """
                         ##....#....#
                         .#.#....0...

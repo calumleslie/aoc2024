@@ -3,13 +3,13 @@ package uk.zootm.aoc2024.day4;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
-import uk.zootm.aoc2024.grid.Grid;
+import uk.zootm.aoc2024.grid.CharacterGrid;
 import uk.zootm.aoc2024.grid.Vector;
 
 public class Day4Test {
     @Test
     public void hasXMas_example() {
-        Grid grid = Grid.fromString(
+        CharacterGrid grid = CharacterGrid.fromString(
                 """
                 MMMSXXMASM
                 MSAMXMSMSA
@@ -29,7 +29,7 @@ public class Day4Test {
 
     @Test
     public void countXMases_example() {
-        Grid grid = Grid.fromString(
+        CharacterGrid grid = CharacterGrid.fromString(
                 """
                 MMMSXXMASM
                 MSAMXMSMSA
