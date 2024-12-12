@@ -5,6 +5,8 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 import com.google.common.primitives.ImmutableLongArray;
+import uk.zootm.aoc2024.util.LongStrings;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.EnumSet;
@@ -12,7 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.OptionalLong;
 import java.util.stream.Stream;
-import uk.zootm.aoc2024.util.LongStrings;
 
 public class Day7 {
     private static final Splitter PREFIX_SEPARATOR = Splitter.on(": ");

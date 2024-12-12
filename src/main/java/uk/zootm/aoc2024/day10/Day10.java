@@ -6,15 +6,16 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 import com.google.common.io.Resources;
-import java.nio.charset.StandardCharsets;
-import java.util.Set;
-import java.util.stream.Stream;
 import uk.zootm.aoc2024.grid.CharacterGrid;
 import uk.zootm.aoc2024.grid.Direction;
 import uk.zootm.aoc2024.grid.Grid;
 import uk.zootm.aoc2024.grid.LongGrid;
 import uk.zootm.aoc2024.grid.ObjGrid;
 import uk.zootm.aoc2024.grid.Vector;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Set;
+import java.util.stream.Stream;
 
 public class Day10 {
     private static final Set<Direction> LEGAL_DIRECTIONS =

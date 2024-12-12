@@ -1,9 +1,9 @@
 package uk.zootm.aoc2024.grid;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
 import uk.zootm.aoc2024.grid.CharacterGrid.FindResult;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CharacterGridTest {
     @Test

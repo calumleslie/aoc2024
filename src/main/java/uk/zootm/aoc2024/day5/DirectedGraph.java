@@ -2,6 +2,7 @@ package uk.zootm.aoc2024.day5;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
+
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedHashSet;

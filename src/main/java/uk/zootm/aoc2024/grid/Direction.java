@@ -2,6 +2,7 @@ package uk.zootm.aoc2024.grid;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
+
 import java.util.Set;
 
 public enum Direction {

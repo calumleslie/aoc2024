@@ -3,12 +3,13 @@ package uk.zootm.aoc2024.day8;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.io.Resources;
+import uk.zootm.aoc2024.grid.CharacterGrid;
+import uk.zootm.aoc2024.grid.Vector;
+
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-import uk.zootm.aoc2024.grid.CharacterGrid;
-import uk.zootm.aoc2024.grid.Vector;
 
 public class Day8 {
     public static void main(String[] args) throws Exception {

@@ -1,17 +1,18 @@
 package uk.zootm.aoc2024.day7;
 
+import com.google.common.primitives.ImmutableLongArray;
+import org.junit.jupiter.api.Test;
+import uk.zootm.aoc2024.day7.Day7.Equation;
+import uk.zootm.aoc2024.day7.Day7.Finder;
+
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.quicktheories.QuickTheory.qt;
 import static org.quicktheories.generators.SourceDSL.longs;
 import static uk.zootm.aoc2024.day7.Day7.Operator.ADD;
 import static uk.zootm.aoc2024.day7.Day7.Operator.CAT;
 import static uk.zootm.aoc2024.day7.Day7.Operator.MUL;
-
-import com.google.common.primitives.ImmutableLongArray;
-import java.util.List;
-import org.junit.jupiter.api.Test;
-import uk.zootm.aoc2024.day7.Day7.Equation;
-import uk.zootm.aoc2024.day7.Day7.Finder;
 
 public class Day7Test {
     @Test

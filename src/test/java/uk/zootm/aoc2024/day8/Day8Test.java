@@ -1,13 +1,14 @@
 package uk.zootm.aoc2024.day8;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.google.common.collect.ImmutableListMultimap;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import uk.zootm.aoc2024.day8.Day8.AntennaMap;
 import uk.zootm.aoc2024.grid.CharacterGrid;
 import uk.zootm.aoc2024.grid.Vector;
+
+import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class Day8Test {
     @Test

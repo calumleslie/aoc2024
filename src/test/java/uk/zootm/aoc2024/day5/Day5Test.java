@@ -1,12 +1,13 @@
 package uk.zootm.aoc2024.day5;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.google.common.base.Splitter;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.assertj.core.api.AbstractBooleanAssert;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class Day5Test {
     private static final String EXAMPLE =

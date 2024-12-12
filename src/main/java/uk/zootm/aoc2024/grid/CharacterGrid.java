@@ -2,6 +2,7 @@ package uk.zootm.aoc2024.grid;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.ImmutableIntArray;
+
 import java.text.BreakIterator;
 import java.util.Arrays;
 import java.util.List;

@@ -1,8 +1,8 @@
 package uk.zootm.aoc2024.day5;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DirectedGraphTest {
     @Test

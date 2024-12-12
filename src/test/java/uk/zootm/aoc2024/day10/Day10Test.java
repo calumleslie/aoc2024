@@ -1,10 +1,10 @@
 package uk.zootm.aoc2024.day10;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
 import uk.zootm.aoc2024.grid.CharacterGrid;
 import uk.zootm.aoc2024.grid.LongGrid;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class Day10Test {
     @Test
