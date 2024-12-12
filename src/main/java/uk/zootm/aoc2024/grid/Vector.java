@@ -5,6 +5,10 @@ public record Vector(int x, int y) implements Comparable<Vector> {
         return new Vector(x + other.x, y + other.y);
     }
 
+    public Vector plus(Direction direction) {
+        return plus(direction.vector());
+    }
+
     public Vector minus(Vector other) {
         return new Vector(x - other.x, y - other.y);
     }
