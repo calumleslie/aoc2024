@@ -2,7 +2,6 @@ package uk.zootm.aoc2024.grid;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
-
 import java.util.Set;
 
 public enum Direction {
@@ -30,9 +29,20 @@ public enum Direction {
     }
 
     public Direction clockwise90() {
+        return rotateSteps(2);
+    }
+
+    public Direction opposite() {
+        return rotateSteps(4);
+    }
+
+    /**
+     * Each step is 45 degrees clockwise
+     */
+    public Direction rotateSteps(int steps) {
         var values = values();
         // Move down the list of values 2 steps (each step is 45 degrees)
-        return values[(ordinal() + 2) % values.length];
+        return values[(ordinal() + steps) % values.length];
     }
 
     public Vector vector() {

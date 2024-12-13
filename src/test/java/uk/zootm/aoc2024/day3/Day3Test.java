@@ -1,11 +1,11 @@
 package uk.zootm.aoc2024.day3;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 import uk.zootm.aoc2024.day3.Day3.Do;
 import uk.zootm.aoc2024.day3.Day3.Dont;
 import uk.zootm.aoc2024.day3.Day3.Mul;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class Day3Test {
 

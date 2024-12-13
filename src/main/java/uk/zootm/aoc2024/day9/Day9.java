@@ -2,7 +2,6 @@ package uk.zootm.aoc2024.day9;
 
 import com.google.common.io.Resources;
 import com.google.common.primitives.ImmutableIntArray;
-
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;

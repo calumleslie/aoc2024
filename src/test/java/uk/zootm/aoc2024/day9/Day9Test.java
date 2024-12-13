@@ -1,10 +1,10 @@
 package uk.zootm.aoc2024.day9;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 import uk.zootm.aoc2024.day9.Day9.FileLocation;
 import uk.zootm.aoc2024.day9.Day9.Filesystem;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class Day9Test {
     @Test

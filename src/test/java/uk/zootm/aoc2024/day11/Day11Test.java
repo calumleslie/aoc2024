@@ -1,9 +1,9 @@
 package uk.zootm.aoc2024.day11;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 import uk.zootm.aoc2024.day11.Day11.FrequencyMap;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class Day11Test {
 

@@ -1,8 +1,8 @@
 package uk.zootm.aoc2024.day1;
 
-import org.junit.jupiter.api.Test;
-
 import static org.assertj.core.api.BDDAssertions.then;
+
+import org.junit.jupiter.api.Test;
 
 public class Day1Test {
 

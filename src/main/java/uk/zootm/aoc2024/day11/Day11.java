@@ -3,8 +3,6 @@ package uk.zootm.aoc2024.day11;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Streams;
 import com.google.common.io.Resources;
-import uk.zootm.aoc2024.util.LongStrings;
-
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +10,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
+import uk.zootm.aoc2024.util.LongStrings;
 
 public class Day11 {
     public static void main(String[] args) throws Exception {

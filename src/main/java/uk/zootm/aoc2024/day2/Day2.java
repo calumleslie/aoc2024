@@ -1,7 +1,6 @@
 package uk.zootm.aoc2024.day2;
 
 import com.google.common.io.Resources;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
