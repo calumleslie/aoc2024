@@ -25,6 +25,12 @@ public record Vector(int x, int y) implements Comparable<Vector> {
         return Math.sqrt((x * x) + (y * y));
     }
 
+    public Vector clamp(Vector bounds) {
+        return new Vector(
+                Math.floorMod(x, bounds.x()),
+                Math.floorMod(y, bounds.y()));
+    }
+
     @Override
     public int compareTo(Vector o) {
         return Double.compare(magnitude(), o.magnitude());
