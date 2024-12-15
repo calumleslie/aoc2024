@@ -13,6 +13,10 @@ public record Vector(int x, int y) implements Comparable<Vector> {
         return new Vector(x - other.x, y - other.y);
     }
 
+    public Vector minus(Direction direction) {
+        return minus(direction.vector());
+    }
+
     public Vector times(int magnitude) {
         return new Vector(x * magnitude, y * magnitude);
     }
