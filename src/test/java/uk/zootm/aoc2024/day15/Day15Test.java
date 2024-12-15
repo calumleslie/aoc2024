@@ -394,6 +394,64 @@ public class Day15Test {
     }
 
     @Test
+    public void wideShove_around() {
+        var wh = warehouse(
+                """
+                ########
+                #......#
+                #..[]..#
+                #.[][].#
+                #[]..[]#
+                #[][][]#
+                #[]..[]#
+                #.[][].#
+                #..[]..#
+                #..@...#
+                ########
+                """);
+
+        wh.moveRobot(N);
+
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
+                ########
+                #..[]..#
+                #.[][].#
+                #[]..[]#
+                #[]..[]#
+                #[][][]#
+                #.[][].#
+                #..[]..#
+                #..@...#
+                #......#
+                ########
+                """));
+    }
+
+    @Test
+    public void wideBox_narrowSidePush() {
+        var wh = warehouse(
+                """
+                ########
+                #.@[]..#
+                ########
+                """);
+
+        wh.moveRobot(E);
+
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
+                ########
+                #..@[].#
+                ########
+                """));
+    }
+
+    @Test
     public void boxesGpsSum_wide() {
         assertThat(warehouse(
                                 """
