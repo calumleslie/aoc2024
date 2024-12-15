@@ -1,5 +1,11 @@
 package uk.zootm.aoc2024.day15;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static uk.zootm.aoc2024.grid.Direction.E;
+import static uk.zootm.aoc2024.grid.Direction.N;
+import static uk.zootm.aoc2024.grid.Direction.S;
+import static uk.zootm.aoc2024.grid.Direction.W;
+
 import org.junit.jupiter.api.Test;
 import uk.zootm.aoc2024.day15.Day15.MapElement;
 import uk.zootm.aoc2024.day15.Day15.Problem;
@@ -7,17 +13,12 @@ import uk.zootm.aoc2024.day15.Day15.Warehouse;
 import uk.zootm.aoc2024.grid.CharacterGrid;
 import uk.zootm.aoc2024.grid.Vector;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static uk.zootm.aoc2024.grid.Direction.E;
-import static uk.zootm.aoc2024.grid.Direction.N;
-import static uk.zootm.aoc2024.grid.Direction.S;
-import static uk.zootm.aoc2024.grid.Direction.W;
-
 public class Day15Test {
 
     @Test
     public void parse_smallExample() {
-        var problem = parseProblem("""
+        var problem = parseProblem(
+                """
                 ########
                 #..O.O.#
                 ##@.O..#
@@ -26,7 +27,7 @@ public class Day15Test {
                 #...O..#
                 #......#
                 ########
-                
+
                 <^^>>>vv<v>>v<<
                 """);
 
@@ -35,13 +36,13 @@ public class Day15Test {
         assertThat(problem.warehouse().map().get(new Vector(1, 1))).isEqualTo(MapElement.BLANK);
         assertThat(problem.warehouse().map().get(new Vector(2, 2))).isEqualTo(MapElement.BLANK);
         assertThat(problem.warehouse().map().get(new Vector(3, 1))).isEqualTo(MapElement.BOX);
-        assertThat(problem.instructions()).containsExactly(
-                W, N, N, E, E, E, S, S, W, S, E, E, S, W, W);
+        assertThat(problem.instructions()).containsExactly(W, N, N, E, E, E, S, S, W, S, E, E, S, W, W);
     }
 
     @Test
     public void steps_example() {
-        var problem = parseProblem("""
+        var problem = parseProblem(
+                """
                 ########
                 #..O.O.#
                 ##@.O..#
@@ -50,14 +51,17 @@ public class Day15Test {
                 #...O..#
                 #......#
                 ########
-                
+
                 <^^>>>vv<v>>v<<
                 """);
 
         var wh = problem.warehouse();
 
         wh.moveRobot(W);
-        assertThat(wh).isEqualTo(warehouse("""
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
                 ########
                 #..O.O.#
                 ##@.O..#
@@ -69,7 +73,10 @@ public class Day15Test {
                 """));
 
         wh.moveRobot(N);
-        assertThat(wh).isEqualTo(warehouse("""
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
                 ########
                 #.@O.O.#
                 ##..O..#
@@ -81,7 +88,10 @@ public class Day15Test {
                 """));
 
         wh.moveRobot(N);
-        assertThat(wh).isEqualTo(warehouse("""
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
                 ########
                 #.@O.O.#
                 ##..O..#
@@ -92,9 +102,11 @@ public class Day15Test {
                 ########
                 """));
 
-
         wh.moveRobot(E);
-        assertThat(wh).isEqualTo(warehouse("""
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
                 ########
                 #..@OO.#
                 ##..O..#
@@ -106,7 +118,10 @@ public class Day15Test {
                 """));
 
         wh.moveRobot(E);
-        assertThat(wh).isEqualTo(warehouse("""
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
                 ########
                 #...@OO#
                 ##..O..#
@@ -117,9 +132,11 @@ public class Day15Test {
                 ########
                 """));
 
-
         wh.moveRobot(E);
-        assertThat(wh).isEqualTo(warehouse("""
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
                 ########
                 #...@OO#
                 ##..O..#
@@ -130,9 +147,11 @@ public class Day15Test {
                 ########
                 """));
 
-
         wh.moveRobot(E);
-        assertThat(wh).isEqualTo(warehouse("""
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
                 ########
                 #...@OO#
                 ##..O..#
@@ -144,7 +163,10 @@ public class Day15Test {
                 """));
 
         wh.moveRobot(S);
-        assertThat(wh).isEqualTo(warehouse("""
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
                 ########
                 #....OO#
                 ##..@..#
@@ -156,7 +178,10 @@ public class Day15Test {
                 """));
 
         wh.moveRobot(S);
-        assertThat(wh).isEqualTo(warehouse("""
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
                 ########
                 #....OO#
                 ##..@..#
@@ -166,10 +191,12 @@ public class Day15Test {
                 #...O..#
                 ########
                 """));
-
 
         wh.moveRobot(W);
-        assertThat(wh).isEqualTo(warehouse("""
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
                 ########
                 #....OO#
                 ##.@...#
@@ -181,7 +208,10 @@ public class Day15Test {
                 """));
 
         wh.moveRobot(S);
-        assertThat(wh).isEqualTo(warehouse("""
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
                 ########
                 #....OO#
                 ##.....#
@@ -193,7 +223,10 @@ public class Day15Test {
                 """));
 
         wh.moveRobot(E);
-        assertThat(wh).isEqualTo(warehouse("""
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
                 ########
                 #....OO#
                 ##.....#
@@ -205,7 +238,10 @@ public class Day15Test {
                 """));
 
         wh.moveRobot(E);
-        assertThat(wh).isEqualTo(warehouse("""
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
                 ########
                 #....OO#
                 ##.....#
@@ -217,7 +253,10 @@ public class Day15Test {
                 """));
 
         wh.moveRobot(S);
-        assertThat(wh).isEqualTo(warehouse("""
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
                 ########
                 #....OO#
                 ##.....#
@@ -229,7 +268,10 @@ public class Day15Test {
                 """));
 
         wh.moveRobot(W);
-        assertThat(wh).isEqualTo(warehouse("""
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
                 ########
                 #....OO#
                 ##.....#
@@ -241,7 +283,10 @@ public class Day15Test {
                 """));
 
         wh.moveRobot(W);
-        assertThat(wh).isEqualTo(warehouse("""
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
                 ########
                 #....OO#
                 ##.....#
@@ -257,7 +302,8 @@ public class Day15Test {
 
     @Test
     public void largeExample() {
-        var problem = parseProblem("""
+        var problem = parseProblem(
+                """
                 ##########
                 #..O..O.O#
                 #......O.#
@@ -268,7 +314,7 @@ public class Day15Test {
                 #.OO.O.OO#
                 #....O...#
                 ##########
-                
+
                 <vv>^<v^>v>^vv^v>v<>v^v<v<^vv<<<^><<><>>v<vvv<>^v^>^<<<><<v<<<v^vv^v>^
                 vvv<<^>^v^^><<>>><>^<<><^vv^^<>vvv<>><^^v>^>vv<>v<<<<v<^v>^<^^>>>^<v<v
                 ><>vv>v^v^<>><>>>><^^>vv>v<^^^>>v^v^<^^>v^^>v^<^v>v<>>v^v^<v>v^^<^^vv<
@@ -284,6 +330,86 @@ public class Day15Test {
         problem.warehouse().moveRobot(problem.instructions());
 
         assertThat(problem.warehouse().boxesGpsSum()).isEqualTo(10092);
+    }
+
+    @Test
+    public void scaleUp() {
+        assertThat(warehouse(
+                                """
+                ##########
+                #..O..O.O#
+                #......O.#
+                #.OO..O.O#
+                #..O@..O.#
+                #O#..O...#
+                #O..O..O.#
+                #.OO.O.OO#
+                #....O...#
+                ##########
+                """)
+                        .scaleUp())
+                .isEqualTo(
+                        warehouse(
+                                """
+                ####################
+                ##....[]....[]..[]##
+                ##............[]..##
+                ##..[][]....[]..[]##
+                ##....[]@.....[]..##
+                ##[]##....[]......##
+                ##[]....[]....[]..##
+                ##..[][]..[]..[][]##
+                ##........[]......##
+                ####################
+                """));
+    }
+
+    @Test
+    public void wideShove() {
+        var wh = warehouse(
+                """
+                ########
+                #..[]..#
+                #[]..[]#
+                #.[][].#
+                #..[]..#
+                #..@...#
+                ########
+                """);
+
+        wh.moveRobot(N);
+
+        assertThat(wh)
+                .isEqualTo(
+                        warehouse(
+                                """
+                ########
+                #[][][]#
+                #.[][].#
+                #..[]..#
+                #..@...#
+                #......#
+                ########
+                """));
+    }
+
+    @Test
+    public void boxesGpsSum_wide() {
+        assertThat(warehouse(
+                                """
+                ####################
+                ##[].......[].[][]##
+                ##[]...........[].##
+                ##[]........[][][]##
+                ##[]......[]....[]##
+                ##..##......[]....##
+                ##..[]............##
+                ##..@......[].[][]##
+                ##......[][]..[]..##
+                ####################
+                """)
+                        .boxesGpsSum())
+                .isEqualTo(9021);
     }
 
     private Warehouse warehouse(String string) {

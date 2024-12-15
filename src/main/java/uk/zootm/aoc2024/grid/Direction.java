@@ -36,13 +36,17 @@ public enum Direction {
         return rotateSteps(4);
     }
 
+    public boolean perpendicularTo(Direction other) {
+        return other.equals(this.rotateSteps(-2)) || other.equals(this.rotateSteps(2));
+    }
+
     /**
      * Each step is 45 degrees clockwise
      */
     public Direction rotateSteps(int steps) {
         var values = values();
         // Move down the list of values 2 steps (each step is 45 degrees)
-        return values[(ordinal() + steps) % values.length];
+        return values[Math.floorMod(ordinal() + steps, values.length)];
     }
 
     public Vector vector() {

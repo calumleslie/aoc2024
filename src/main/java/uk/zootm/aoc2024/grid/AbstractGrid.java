@@ -7,7 +7,7 @@ abstract class AbstractGrid<T> implements Grid<T> {
     public boolean equals(Object obj) {
         if (obj instanceof Grid g) {
             return width() == g.width()
-                    && height() == g.width()
+                    && height() == g.height()
                     && coords().allMatch(c -> Objects.equals(get(c), g.get(c)));
         } else {
             return false;
