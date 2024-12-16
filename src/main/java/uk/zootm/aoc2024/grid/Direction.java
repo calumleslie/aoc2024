@@ -28,6 +28,10 @@ public enum Direction {
         return CARDINAL;
     }
 
+    public Direction anticlockwise90() {
+        return rotateSteps(-2);
+    }
+
     public Direction clockwise90() {
         return rotateSteps(2);
     }

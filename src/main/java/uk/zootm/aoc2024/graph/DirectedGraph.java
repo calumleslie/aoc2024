@@ -3,6 +3,7 @@ package uk.zootm.aoc2024.graph;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -26,6 +27,10 @@ public class DirectedGraph<N, E> {
 
     public void addNode(N name) {
         nodes.add(name);
+    }
+
+    public Set<N> nodes() {
+        return Collections.unmodifiableSet(nodes);
     }
 
     public void addEdge(N from, N to, E edge) {

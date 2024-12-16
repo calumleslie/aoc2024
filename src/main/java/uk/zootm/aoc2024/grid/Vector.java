@@ -61,4 +61,9 @@ public record Vector(int x, int y) implements Comparable<Vector> {
 
         return new Vector(minimizedX, minimizedY);
     }
+
+    @Override
+    public String toString() {
+        return String.format("(%d,%d)", x, y);
+    }
 }
