@@ -1,13 +1,13 @@
-package uk.zootm.aoc2024.day5;
-
-import static org.assertj.core.api.Assertions.assertThat;
+package uk.zootm.aoc2024.graph;
 
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DirectedGraphTest {
     @Test
     public void hasCycles_noCycles() {
-        DirectedGraph<Integer> graph = new DirectedGraph<>();
+        SimpleDirectedGraph<Integer> graph = new SimpleDirectedGraph<>();
         graph.addEdge(1, 2);
         graph.addEdge(2, 3);
         graph.addEdge(4, 5);
@@ -20,7 +20,7 @@ public class DirectedGraphTest {
 
     @Test
     public void hasCycles_withCycles() {
-        DirectedGraph<Integer> graph = new DirectedGraph<>();
+        SimpleDirectedGraph<Integer> graph = new SimpleDirectedGraph<>();
         graph.addEdge(1, 2);
         graph.addEdge(2, 3);
         graph.addEdge(4, 5);

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.AbstractBooleanAssert;
 import org.junit.jupiter.api.Test;
+import uk.zootm.aoc2024.graph.DirectedGraph;
+import uk.zootm.aoc2024.graph.SimpleDirectedGraph;
 
 public class Day5Test {
     private static final String EXAMPLE =
@@ -55,7 +57,7 @@ public class Day5Test {
                 """;
         Day5.Input input = inputOf(inputString);
 
-        DirectedGraph<Integer> expectedPageOrdering = new DirectedGraph();
+        SimpleDirectedGraph<Integer> expectedPageOrdering = new SimpleDirectedGraph<>();
         expectedPageOrdering.addEdge(47, 53);
         expectedPageOrdering.addEdge(97, 13);
         expectedPageOrdering.addEdge(97, 61);
@@ -68,7 +70,7 @@ public class Day5Test {
     @Test
     public void compliantWithRules_example() {
         Day5.Input example = inputOf(EXAMPLE);
-        DirectedGraph<Integer> exampleOrdering = example.pageOrdering();
+        SimpleDirectedGraph<Integer> exampleOrdering = example.pageOrdering();
 
         assertCompliance(exampleOrdering, "75,47,61,53,29").isTrue();
         assertCompliance(exampleOrdering, "97,61,53,29,13").isTrue();
@@ -88,7 +90,7 @@ public class Day5Test {
     @Test
     public void correct_example() {
         Day5.Input example = inputOf(EXAMPLE);
-        DirectedGraph<Integer> exampleOrdering = example.pageOrdering();
+        SimpleDirectedGraph<Integer> exampleOrdering = example.pageOrdering();
 
         assertThat(Day5.correct(exampleOrdering, updateOf("75,47,61,53,2")))
                 .containsExactlyElementsOf(updateOf("75,47,61,53,2"));
@@ -114,7 +116,7 @@ public class Day5Test {
         assertThat(Day5.part2(example)).isEqualTo(123);
     }
 
-    private AbstractBooleanAssert<?> assertCompliance(DirectedGraph<Integer> ordering, String line) {
+    private AbstractBooleanAssert<?> assertCompliance(SimpleDirectedGraph<Integer> ordering, String line) {
         var update = updateOf(line);
 
         return assertThat(Day5.compliantWithRules(ordering, update));

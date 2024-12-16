@@ -3,6 +3,8 @@ package uk.zootm.aoc2024.day5;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.io.Resources;
+import uk.zootm.aoc2024.graph.SimpleDirectedGraph;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -44,14 +46,14 @@ public class Day5 {
         return line.get(line.size() / 2);
     }
 
-    static List<Integer> correct(DirectedGraph<Integer> pageOrdering, List<Integer> updateOrder) {
+    static List<Integer> correct(SimpleDirectedGraph<Integer> pageOrdering, List<Integer> updateOrder) {
         Preconditions.checkArgument(!pageOrdering.hasCycles());
         List<Integer> result = new ArrayList<>(updateOrder);
         for (int i = 0; i < result.size() - 1; i++) {
             var page = result.get(i);
             var followingPages = result.subList(i + 1, result.size());
 
-            var mustPrecede = pageOrdering.incoming(page);
+            var mustPrecede = pageOrdering.incomingNodes(page);
 
             var predecessor =
                     followingPages.stream().filter(mustPrecede::contains).findFirst();
@@ -68,12 +70,12 @@ public class Day5 {
         return result;
     }
 
-    static boolean compliantWithRules(DirectedGraph<Integer> pageOrdering, List<Integer> updateOrder) {
+    static boolean compliantWithRules(SimpleDirectedGraph<Integer> pageOrdering, List<Integer> updateOrder) {
         for (int i = 0; i < updateOrder.size() - 1; i++) {
             var page = updateOrder.get(i);
             var followingPages = updateOrder.subList(i + 1, updateOrder.size());
 
-            var mustPrecede = pageOrdering.incoming(page);
+            var mustPrecede = pageOrdering.incomingNodes(page);
 
             if (followingPages.stream().anyMatch(mustPrecede::contains)) {
                 return false;
@@ -82,9 +84,9 @@ public class Day5 {
         return true;
     }
 
-    record Input(DirectedGraph<Integer> pageOrdering, List<List<Integer>> updateOrders) {
+    record Input(SimpleDirectedGraph<Integer> pageOrdering, List<List<Integer>> updateOrders) {
         static Input parse(Stream<String> lines) {
-            DirectedGraph<Integer> pageOrdering = new DirectedGraph<>();
+            SimpleDirectedGraph<Integer> pageOrdering = new SimpleDirectedGraph<>();
             Iterator<String> lineIterator = lines.iterator();
             while (lineIterator.hasNext()) {
                 String line = lineIterator.next();
