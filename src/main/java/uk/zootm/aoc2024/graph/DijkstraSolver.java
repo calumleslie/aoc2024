@@ -3,6 +3,7 @@ package uk.zootm.aoc2024.graph;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -59,7 +60,12 @@ public class DijkstraSolver<E> {
                     .filter(paths::containsKey)
                     .map(paths::get)
                     .min(Comparator.comparing(ps -> ps.getFirst().totalCost()))
-                    .orElseThrow(() -> new IllegalStateException("unreachable, visited: " + paths.keySet()));
+                    .orElse(Collections.emptyList());
+
+            if (currentPaths.isEmpty()) {
+                // Unreachable
+                return Collections.emptyList();
+            }
 
             var currentNode = currentPaths.getFirst().end();
             if (isEnd.test(currentNode)) {

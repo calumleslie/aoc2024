@@ -4,8 +4,10 @@ import com.google.common.io.Resources;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import uk.zootm.aoc2024.graph.DijkstraSolver;
 import uk.zootm.aoc2024.graph.DijkstraSolver.Path;
@@ -23,12 +25,28 @@ public class Day18 {
 
         var firstKb = parseVectors(lines.stream()).limit(1024).collect(Collectors.toSet());
 
-        System.out.printf("Part 1: %d%n", shortestPath(BOUNDS, firstKb).totalCost());
+        System.out.printf("Part 1: %d%n", shortestPath(BOUNDS, firstKb).get().totalCost());
+
+        var all = parseVectors(lines.stream()).toList();
+        var blocker = firstPathBlocker(BOUNDS, all).get();
+        System.out.printf("Part 2: %d,%d%n", blocker.x(), blocker.y());
     }
 
-    static Path<Vector> shortestPath(Vector size, Set<Vector> obstructed) {
-        // Construct a graph linking every cell to its valid moves
+    static Optional<Vector> firstPathBlocker(Vector size, List<Vector> allObstructions) {
 
+        // We know 1024 is okay from the prior example
+        return IntStream.range(1024, allObstructions.size() - 1)
+                .filter(i -> {
+                    System.out.println(i);
+                    var obstructions = Set.copyOf(allObstructions.subList(0, i + 1));
+                    return shortestPath(size, obstructions).isEmpty();
+                })
+                .mapToObj(allObstructions::get)
+                .findFirst();
+    }
+
+    static Optional<Path<Vector>> shortestPath(Vector size, Set<Vector> obstructed) {
+        // Construct a graph linking every cell to its valid moves
         SimpleDirectedGraph<Vector> graph = new SimpleDirectedGraph<>();
         size.containedCoords()
                 // Cannot move away from obstruction
@@ -45,7 +63,7 @@ public class Day18 {
         DijkstraSolver<NoValue> solver = new DijkstraSolver<>(e -> 1L, PathsToRetain.SINGLE);
         List<Path<Vector>> paths = solver.pathsToNode(graph, new Vector(0, 0), size.plus(Direction.NW));
         // All paths same length
-        return paths.getFirst();
+        return paths.stream().findFirst();
     }
 
     static Stream<Vector> parseVectors(Stream<String> lines) {
