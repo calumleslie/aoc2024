@@ -1,16 +1,16 @@
 package uk.zootm.aoc2024.day16;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 import uk.zootm.aoc2024.day16.Day16.Location;
 import uk.zootm.aoc2024.day16.Day16.Maze;
-import uk.zootm.aoc2024.day16.Day16.Path;
+import uk.zootm.aoc2024.graph.DijkstraSolver;
 import uk.zootm.aoc2024.grid.CharacterGrid;
 import uk.zootm.aoc2024.grid.Direction;
 import uk.zootm.aoc2024.grid.Vector;
+
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class Day16Test {
 
@@ -83,24 +83,24 @@ public class Day16Test {
         var maze = maze(EXAMPLE1);
 
         assertThat(Day16.minCostPaths(maze))
-                .contains(new Path(new Location(1, 13, Direction.E))
-                        .then(1, 13, Direction.N, 1000)
-                        .then(1, 11, Direction.N, 2)
-                        .then(1, 11, Direction.E, 1000)
-                        .then(3, 11, Direction.E, 2)
-                        .then(3, 11, Direction.N, 1000)
-                        .then(3, 9, Direction.N, 2)
-                        .then(3, 7, Direction.N, 2)
-                        .then(3, 7, Direction.E, 1000)
-                        .then(5, 7, Direction.E, 2)
-                        .then(9, 7, Direction.E, 4)
-                        .then(11, 7, Direction.E, 2)
-                        .then(11, 7, Direction.S, 1000)
-                        .then(11, 13, Direction.S, 6)
-                        .then(11, 13, Direction.E, 1000)
-                        .then(13, 13, Direction.E, 2)
-                        .then(13, 13, Direction.N, 1000)
-                        .then(13, 1, Direction.N, 12));
+                .contains(new DijkstraSolver.Path<>(new Location(1, 13, Direction.E))
+                        .then(new Location(1, 13, Direction.N), 1000)
+                        .then(new Location(1, 11, Direction.N), 2)
+                        .then(new Location(1, 11, Direction.E), 1000)
+                        .then(new Location(3, 11, Direction.E), 2)
+                        .then(new Location(3, 11, Direction.N), 1000)
+                        .then(new Location(3, 9, Direction.N), 2)
+                        .then(new Location(3, 7, Direction.N), 2)
+                        .then(new Location(3, 7, Direction.E), 1000)
+                        .then(new Location(5, 7, Direction.E), 2)
+                        .then(new Location(9, 7, Direction.E), 4)
+                        .then(new Location(11, 7, Direction.E), 2)
+                        .then(new Location(11, 7, Direction.S), 1000)
+                        .then(new Location(11, 13, Direction.S), 6)
+                        .then(new Location(11, 13, Direction.E), 1000)
+                        .then(new Location(13, 13, Direction.E), 2)
+                        .then(new Location(13, 13, Direction.N), 1000)
+                        .then(new Location(13, 1, Direction.N), 12));
     }
 
     @Test

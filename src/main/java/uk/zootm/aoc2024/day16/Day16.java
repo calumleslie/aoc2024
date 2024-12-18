@@ -1,8 +1,8 @@
 package uk.zootm.aoc2024.day16;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.io.Resources;
+import uk.zootm.aoc2024.graph.DijkstraSolver;
+import uk.zootm.aoc2024.graph.DijkstraSolver.Path;
 import uk.zootm.aoc2024.graph.DirectedGraph;
 import uk.zootm.aoc2024.grid.CharacterGrid;
 import uk.zootm.aoc2024.grid.Direction;
@@ -12,8 +12,6 @@ import uk.zootm.aoc2024.grid.Vector;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -28,22 +26,17 @@ public class Day16 {
         var paths = minCostPaths(maze);
         System.out.printf("Part 1: %d%n", paths.getFirst().totalCost());
 
-        var uniqueLocations = paths.stream().flatMap(Path::trace).map(Location::vector).distinct().count();
+        var uniqueLocations = paths.stream().flatMap(Day16::trace).map(Location::vector).distinct().count();
         System.out.printf("Part 2: %d%n", uniqueLocations);
-
-//        for(int i =0; i< paths.size(); i++) {
-//            System.out.printf("%nPATH %d/%d%n", i+1, paths.size());
-//            System.out.println(draw(grid, paths.get(i)));
-//        }
     }
 
-    static long uniqueLocations(List<Path> paths) {
-        return paths.stream().flatMap(Path::trace).map(Location::vector).distinct().count();
+    static long uniqueLocations(List<Path<Location>> paths) {
+        return paths.stream().flatMap(Day16::trace).map(Location::vector).distinct().count();
     }
 
-    static Grid<String> draw(Grid<String> base, Path path) {
+    static Grid<String> draw(Grid<String> base, Path<Location> path) {
         var result = ObjGrid.from(base, x -> x);
-        path.trace().forEach(loc -> result.set(loc.vector(), symbol(loc.direction())));
+        trace(path).forEach(loc -> result.set(loc.vector(), symbol(loc.direction())));
         return result;
     }
 
@@ -60,49 +53,25 @@ public class Day16 {
     // Approach: Generate graph of all transitions, solve using Dijkstra's algorithm
     // Transitions include turns so each "node" counts as a single transition with cost
 
-    static List<Path> minCostPaths(Maze maze) {
+    static List<Path<Location>> minCostPaths(Maze maze) {
         var startLoc = new Location(maze.start(), Direction.E);
+        var solver = new DijkstraSolver<Long>(x -> x);
 
-        return dijkstra(maze.map(), startLoc, maze.end());
+        return solver.pathsToMatchingNode(maze.map(), startLoc, loc -> loc.vector().equals(maze.end()));
     }
 
-    static List<Path> dijkstra(DirectedGraph<Location, Long> graph, Location start, Vector end) {
-        // linked as we'll be iterating this a lot
-        var unvisited = new LinkedHashSet<>(graph.nodes());
-        var paths = ArrayListMultimap.<Location, Path>create();
-        paths.put(start, new Path(start));
+    private static Stream<Location> trace(Path<Location> path) {
+        return path.toPathList().stream().flatMap(Day16::traceSingle);
+    }
 
-        while (true) {
-            var currentPaths = unvisited.stream()
-                    .filter(paths::containsKey)
-                    .map(paths::get)
-                    .min(Comparator.comparing(ps -> ps.getFirst().totalCost()))
-                    .orElseThrow(() -> new IllegalStateException("unreachable, visited: " + paths.keySet()));
-
-            var currentLocation = currentPaths.getFirst().head();
-            if (currentLocation.vector().equals(end)) {
-                return currentPaths;
-            }
-
-            for (var outgoing : graph.outgoing(currentLocation).entrySet()) {
-                var outPaths = currentPaths.stream().map(p -> p.then(outgoing.getKey(), outgoing.getValue())).toList();
-
-                // Cost of all of these is required to be the same
-                var cost = outPaths.getFirst().totalCost();
-
-                var existingCost = paths.get(outgoing.getKey()).stream().mapToLong(Path::totalCost).findFirst().orElse(Long.MAX_VALUE);
-
-                if(existingCost == cost) {
-                    // We found more equivalent paths
-                    paths.putAll(outgoing.getKey(), outPaths);
-                } else if(cost < existingCost) {
-                    // We found better paths, replace existing
-                    paths.removeAll(outgoing.getKey());
-                    paths.putAll(outgoing.getKey(), outPaths);
-                }
-            }
-
-            unvisited.remove(currentPaths.getFirst().head());
+    private static Stream<Location> traceSingle(Path<Location> segment) {
+        if(segment.prefix() == null) {
+            return Stream.of(segment.end());
+        } else {
+            var startVector = segment.prefix().end().vector;
+            var start = new Location(startVector, segment.end().direction());
+            var tooFar = segment.end().step();
+            return Stream.iterate(start, Location::step).takeWhile(loc -> !loc.equals(tooFar));
         }
     }
 
@@ -191,73 +160,6 @@ public class Day16 {
             }
             var code = grid.get(location);
             return code.equals(".") || code.equals("S") || code.equals("E");
-        }
-    }
-
-    record Path(Location head, Path tail, Long edgeCost, long totalCost) {
-        Path {
-            Preconditions.checkArgument((tail == null) == (edgeCost == null));
-        }
-
-        Path(Location head) {
-            this(head, null, null, 0L);
-        }
-
-        Vector vector() {
-            return head.vector();
-        }
-
-        Stream<Path> stream() {
-            var paths = Stream.iterate(this, curr -> curr.tail()).takeWhile(curr -> curr != null).toList();
-            return paths.reversed().stream();
-        }
-
-        Stream<Location> trace() {
-            return stream().flatMap(Path::traceSingle);
-        }
-
-        private Stream<Location> traceSingle() {
-            if(tail() == null) {
-                return Stream.of(head);
-            } else {
-                var start = new Location(tail.head().vector(), head().direction());
-                var tooFar = head().step();
-                return Stream.iterate(start, Location::step).takeWhile(loc -> !loc.equals(tooFar));
-            }
-        }
-
-        Path then(Location newHead, long edgeCost) {
-            return new Path(newHead, this, edgeCost, totalCost() + edgeCost);
-        }
-
-        Path then(int newX, int newY, Direction newDir, long edgeCost) {
-            return then(new Location(newX, newY, newDir), edgeCost);
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder builder = new StringBuilder();
-
-            builder.append("Path(cost=").append(totalCost);
-
-            builder.append(", path=\n");
-
-            builder.append("    start => ").append(head).append("\n");
-
-            var curr = this;
-
-            while (curr.tail != null) {
-                builder.append("    (")
-                        .append(curr.edgeCost)
-                        .append(") =>")
-                        .append(curr.tail.head)
-                        .append("\n");
-                curr = curr.tail;
-            }
-
-            builder.append(")");
-
-            return builder.toString();
         }
     }
 
