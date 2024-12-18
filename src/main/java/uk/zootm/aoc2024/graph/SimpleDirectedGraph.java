@@ -7,8 +7,8 @@ import com.google.common.base.Preconditions;
  *
  * @param <N>
  */
-public class SimpleDirectedGraph<N> extends DirectedGraph<N, Object> {
-    private static final Object VALUE = new Object();
+public class SimpleDirectedGraph<N> extends DirectedGraph<N, SimpleDirectedGraph.NoValue> {
+    private static final NoValue VALUE = new NoValue();
 
     // Convenience method for when one is not using edge metadata
     public void addEdge(N from, N to) {
@@ -16,9 +16,19 @@ public class SimpleDirectedGraph<N> extends DirectedGraph<N, Object> {
     }
 
     @Override
-    public void addEdge(N from, N to, Object edge) {
+    public void addEdge(N from, N to, NoValue edge) {
         // With apologies to Liskov
         Preconditions.checkArgument(edge == VALUE, "This graph does not store edge metadata");
         super.addEdge(from, to, edge);
+    }
+
+    public static class NoValue {
+        private NoValue() {
+        }
+
+        @Override
+        public String toString() {
+            return "(none)";
+        }
     }
 }

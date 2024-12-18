@@ -11,17 +11,19 @@ public interface Grid<T> {
 
     int height();
 
+    default Vector bounds() {
+        return new Vector(width(), height());
+    }
+
     /**
      * Guaranteed to be in row-then-column order, ascending
      */
     default Stream<Vector> coords() {
-        return IntStream.range(0, height())
-                .mapToObj(y -> IntStream.range(0, width()).mapToObj(x -> new Vector(x, y)))
-                .flatMap(x -> x);
+        return bounds().containedCoords();
     }
 
     default boolean inBounds(Vector coord) {
-        return coord.x() >= 0 && coord.x() < width() && coord.y() >= 0 && coord.y() < height();
+        return coord.inBounds(bounds());
     }
 
     default void checkBounds(Vector coord) {

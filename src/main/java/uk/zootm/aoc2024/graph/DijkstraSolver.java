@@ -2,7 +2,7 @@ package uk.zootm.aoc2024.graph;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
-
+import com.google.common.collect.ListMultimap;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -12,10 +12,36 @@ import java.util.function.ToLongFunction;
 import java.util.stream.Stream;
 
 public class DijkstraSolver<E> {
+
+    public enum PathsToRetain {
+        ALL {
+            @Override
+            <N> void addPaths(ListMultimap<N, Path<N>> paths, N key, List<Path<N>> newPaths) {
+                paths.putAll(key, newPaths);
+            }
+        },
+
+        SINGLE {
+            <N> void addPaths(ListMultimap<N, Path<N>> paths, N key, List<Path<N>> newPaths) {
+                if (!paths.containsKey(key)) {
+                    paths.put(key, newPaths.getFirst());
+                }
+            }
+        };
+
+        abstract <N> void addPaths(ListMultimap<N, Path<N>> paths, N key, List<Path<N>> newPaths);
+    }
+
     private final ToLongFunction<E> weighEdge;
+    private final PathsToRetain pathsToRetain;
 
     public DijkstraSolver(ToLongFunction<E> weighEdge) {
+        this(weighEdge, PathsToRetain.ALL);
+    }
+
+    public DijkstraSolver(ToLongFunction<E> weighEdge, PathsToRetain pathsToRetain) {
         this.weighEdge = weighEdge;
+        this.pathsToRetain = pathsToRetain;
     }
 
     public <N> List<Path<N>> pathsToNode(DirectedGraph<N, E> graph, N start, N end) {
@@ -42,19 +68,26 @@ public class DijkstraSolver<E> {
 
             for (var outgoing : graph.outgoing(currentNode).entrySet()) {
                 var incrementalCost = weighEdge.applyAsLong(outgoing.getValue());
-                var outPaths = currentPaths.stream().map(p -> p.then(outgoing.getKey(), incrementalCost)).toList();
+                var outPaths = currentPaths.stream()
+                        .map(p -> p.then(outgoing.getKey(), incrementalCost))
+                        .toList();
 
                 // Cost of all of these is required to be the same
                 var cost = outPaths.getFirst().totalCost();
-                var existingCost = paths.get(outgoing.getKey()).stream().mapToLong(Path::totalCost).findFirst().orElse(Long.MAX_VALUE);
+                var existingCost = paths.get(outgoing.getKey()).stream()
+                        .mapToLong(Path::totalCost)
+                        .findFirst()
+                        .orElse(Long.MAX_VALUE);
 
-                if(existingCost == cost) {
+                if (existingCost == cost) {
                     // We found more equivalent paths
-                    paths.putAll(outgoing.getKey(), outPaths);
-                } else if(cost < existingCost) {
+                    // paths.putAll(outgoing.getKey(), outPaths);
+                    pathsToRetain.addPaths(paths, outgoing.getKey(), outPaths);
+                } else if (cost < existingCost) {
                     // We found better paths, replace existing
                     paths.removeAll(outgoing.getKey());
-                    paths.putAll(outgoing.getKey(), outPaths);
+                    // paths.putAll(outgoing.getKey(), outPaths);
+                    pathsToRetain.addPaths(paths, outgoing.getKey(), outPaths);
                 }
             }
 
@@ -69,7 +102,7 @@ public class DijkstraSolver<E> {
         }
 
         public Path(N node) {
-           this(node, null, 0L);
+            this(node, null, 0L);
         }
 
         public Path<N> then(N node, long incrementalCost) {
@@ -77,7 +110,9 @@ public class DijkstraSolver<E> {
         }
 
         public List<Path<N>> toPathList() {
-            var reverse = Stream.iterate(this, p -> p.prefix()).takeWhile(p -> p != null).toList();
+            var reverse = Stream.iterate(this, p -> p.prefix())
+                    .takeWhile(p -> p != null)
+                    .toList();
             return reverse.reversed();
         }
     }

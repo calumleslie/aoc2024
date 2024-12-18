@@ -1,5 +1,8 @@
 package uk.zootm.aoc2024.grid;
 
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 public record Vector(int x, int y) implements Comparable<Vector> {
     public Vector plus(Vector other) {
         return new Vector(x + other.x, y + other.y);
@@ -33,6 +36,19 @@ public record Vector(int x, int y) implements Comparable<Vector> {
         return new Vector(
                 Math.floorMod(x, bounds.x()),
                 Math.floorMod(y, bounds.y()));
+    }
+
+    public boolean inBounds(Vector bounds) {
+        return x >= 0 && x < bounds.x() && y >= 0 && y < bounds.y();
+    }
+
+    /**
+     * Treat this vector as bounds and find every value within. Guaranteed to be in row-then-column order, ascending.
+     */
+    public Stream<Vector> containedCoords() {
+        return IntStream.range(0, y())
+                .mapToObj(y -> IntStream.range(0, x()).mapToObj(x -> new Vector(x, y)))
+                .flatMap(x -> x);
     }
 
     @Override
