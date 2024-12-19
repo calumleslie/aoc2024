@@ -21,11 +21,12 @@ public class Day19 {
         System.out.println(problem);
 
         System.out.printf("Part 1: %d%n", problem.possiblePatterns().size());
+        System.out.printf("Part 2: %d%n", problem.waysToFormAllPatterns());
     }
 
     static class TowelRack {
         private final List<String> towels;
-        private final Map<String, Boolean> possibleMemo = new HashMap<>();
+        private final Map<String, Long> waysToFormMemo = new HashMap<>();
 
         TowelRack(List<String> towels) {
             this.towels = towels;
@@ -39,32 +40,38 @@ public class Day19 {
             return towels;
         }
 
-        boolean isPossible(String pattern) {
-            if(possibleMemo.containsKey(pattern)) {
-                return possibleMemo.get(pattern);
+        long waysToForm(String pattern) {
+            if(waysToFormMemo.containsKey(pattern)) {
+                return waysToFormMemo.get(pattern);
             }
 
             if (pattern.isBlank()) {
-                return true;
+                return 1;
             }
 
-            for (String towel : towels) {
-                // I've been avoiding recursion before now but this really should not be a problem.
-                if (pattern.startsWith(towel) && isPossible(pattern.substring(towel.length()))) {
-                    possibleMemo.put(pattern, true);
-                    return true;
-                }
-            }
+            long waysToForm = towels.stream()
+                    .filter(pattern::startsWith)
+                    .mapToLong(towel -> waysToForm(pattern.substring(towel.length())))
+                    .sum();
 
-            possibleMemo.put(pattern, false);
 
-            return false;
+            waysToFormMemo.put(pattern, waysToForm);
+
+            return waysToForm;
+        }
+
+        boolean isPossible(String pattern) {
+            return waysToForm(pattern) > 0;
         }
     }
 
     record Problem(TowelRack towelRack, List<String> patterns) {
         List<String> possiblePatterns() {
             return patterns.stream().filter(towelRack::isPossible).toList();
+        }
+
+        long waysToFormAllPatterns() {
+            return patterns.stream().mapToLong(towelRack::waysToForm).sum();
         }
 
         static Problem parse(Stream<String> lines) {
