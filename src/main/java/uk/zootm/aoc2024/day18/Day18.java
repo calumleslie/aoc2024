@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import uk.zootm.aoc2024.graph.DijkstraSolver;
 import uk.zootm.aoc2024.graph.DijkstraSolver.Path;
@@ -16,6 +15,7 @@ import uk.zootm.aoc2024.graph.SimpleDirectedGraph;
 import uk.zootm.aoc2024.graph.SimpleDirectedGraph.NoValue;
 import uk.zootm.aoc2024.grid.Direction;
 import uk.zootm.aoc2024.grid.Vector;
+import uk.zootm.aoc2024.util.Bisect;
 
 public class Day18 {
     private static final Vector BOUNDS = new Vector(71, 71);
@@ -33,16 +33,12 @@ public class Day18 {
     }
 
     static Optional<Vector> firstPathBlocker(Vector size, List<Vector> allObstructions) {
+        int index = Bisect.bisectInt(allObstructions.size() - 1, i -> {
+            var obstructions = Set.copyOf(allObstructions.subList(0, i + 1));
+            return shortestPath(size, obstructions).isEmpty();
+        });
 
-        // We know 1024 is okay from the prior example
-        return IntStream.range(1024, allObstructions.size() - 1)
-                .filter(i -> {
-                    System.out.println(i);
-                    var obstructions = Set.copyOf(allObstructions.subList(0, i + 1));
-                    return shortestPath(size, obstructions).isEmpty();
-                })
-                .mapToObj(allObstructions::get)
-                .findFirst();
+        return Optional.ofNullable(allObstructions.get(index));
     }
 
     static Optional<Path<Vector>> shortestPath(Vector size, Set<Vector> obstructed) {
